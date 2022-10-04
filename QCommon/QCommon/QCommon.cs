@@ -78,6 +78,7 @@ namespace QCommonLib
         }
 
         /// <summary>
+        /// Get the CultureInfo, correcting for invalid codes and adapting Chinese code
         /// </summary>
         /// <returns>CultureInfo to use for localisation</returns>
         public static CultureInfo GetCultureInfo()
