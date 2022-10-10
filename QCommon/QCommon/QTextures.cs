@@ -102,7 +102,7 @@ namespace QCommonLib
             return UIView.GetAView().defaultAtlas;
         }
 
-        private static Texture2D LoadTextureFromAssembly(Assembly assembly, string path)
+        public static Texture2D LoadTextureFromAssembly(Assembly assembly, string path)
         {
             Stream manifestResourceStream = assembly.GetManifestResourceStream(path);
 

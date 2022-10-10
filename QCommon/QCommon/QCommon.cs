@@ -6,6 +6,7 @@ using System.Reflection;
 using UnityEngine;
 using System.Globalization;
 using ColossalFramework.Globalization;
+using UnityEngine.SceneManagement;
 
 namespace QCommonLib
 {
@@ -25,18 +26,18 @@ namespace QCommonLib
             {
                 try
                 {
-                    if (pluginInfo.userModInstance?.GetType().Name.ToLower() == modName && (!onlyEnabled || pluginInfo.isEnabled))
+                    if (pluginInfo.userModInstance?.GetType().Name.ToLower() == modName.ToLower() && (!onlyEnabled || pluginInfo.isEnabled))
                     {
                         if (assNameExcept.Length > 0)
                         {
-                            if (pluginInfo.GetAssemblies().Any(mod => mod.GetName().Name.ToLower() == assNameExcept))
+                            if (pluginInfo.GetAssemblies().Any(mod => mod.GetName().Name.ToLower() == assNameExcept.ToLower()))
                             {
                                 break;
                             }
                         }
                         foreach (Assembly assembly in pluginInfo.GetAssemblies())
                         {
-                            if (assembly.GetName().Name.ToLower() == assName)
+                            if (assembly.GetName().Name.ToLower() == assName.ToLower())
                             {
                                 return assembly;
                             }
@@ -60,7 +61,7 @@ namespace QCommonLib
             string msg = $"Mods:";
             foreach (PluginManager.PluginInfo pluginInfo in Singleton<PluginManager>.instance.GetPluginsInfo())
             {
-                msg += $"\n{pluginInfo.name} ({pluginInfo.isEnabled}, {pluginInfo.userModInstance.GetType().Name}):\n  ";
+                msg += $"\nName: {pluginInfo.name} (Enabled:{pluginInfo.isEnabled}, UserModName:{pluginInfo.userModInstance.GetType().Name}):\n  ";
                 foreach (Assembly assembly in pluginInfo.GetAssemblies())
                 {
                     msg += $"{assembly.GetName().Name.ToLower()}, ";
@@ -81,6 +82,32 @@ namespace QCommonLib
                 lang = DefaultSettings.localeID;
             }
             return new CultureInfo(lang);
+        }
+
+        public static SceneTypes Scene
+        {
+            get
+            {
+                switch (SceneManager.GetActiveScene().name)
+                {
+                    case "Game":
+                        return SceneTypes.Game;
+                    case "MapEditor":
+                        return SceneTypes.MapEditor;
+                    case "AssetEditor":
+                        return SceneTypes.AssetEditor;
+                }
+
+                return SceneTypes.Unknown;
+            }
+        }
+
+        public enum SceneTypes
+        {
+            Unknown = 0,
+            Game = 1,
+            MapEditor = 2,
+            AssetEditor = 3
         }
     }
 }
