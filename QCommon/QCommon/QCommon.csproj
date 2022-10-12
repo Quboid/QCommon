@@ -58,6 +58,7 @@
     <Compile Include="QCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QKeybinding.cs" />
+    <Compile Include="QLogger.cs" />
     <Compile Include="QTextures.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
