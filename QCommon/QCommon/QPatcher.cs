@@ -10,6 +10,7 @@ namespace QCommonLib
 {
     public class QPatcher
     {
+        private readonly Assembly caller;
         private string HarmonyId;
         private bool patched = false;
         private bool IsDebug = false;
@@ -31,10 +32,11 @@ namespace QCommonLib
 
         public QPatcher(string id, DEarlyDeploy earlyDeploy = null, DEarlyRevert earlyRevert = null, bool isDebug = false)
         {
+            caller = Assembly.GetCallingAssembly();
             HarmonyId = id;
             IsDebug = isDebug;
             EarlyRevert = earlyRevert;
-            if (earlyDeploy != null) earlyDeploy(this);
+            earlyDeploy?.Invoke(this);
         }
 
         public delegate void DEarlyDeploy(QPatcher patcher);
@@ -45,7 +47,7 @@ namespace QCommonLib
             if (patched) return;
 
             patched = true;
-            HarmonyHelper.DoOnHarmonyReady(() => Instance.PatchAll());
+            HarmonyHelper.DoOnHarmonyReady(() => Instance.PatchAll(caller));
         }
 
         public void UnpatchAll()
@@ -53,7 +55,7 @@ namespace QCommonLib
             if (!patched) return;
 
             if (EarlyRevert != null) EarlyRevert(this);
-            HarmonyHelper.DoOnHarmonyReady(() => Instance.UnpatchAll());
+            HarmonyHelper.DoOnHarmonyReady(() => Instance.UnpatchAll(HarmonyId));
             patched = false;
         }
 

@@ -7,7 +7,7 @@ namespace QCommonLib
 {
     public static class QTextures
     { 
-        public static UITextureAtlas CreateTextureAtlas(Assembly assembly, string atlasName, string[] spriteNames, string assemblyPath)
+        public static UITextureAtlas CreateTextureAtlas(string atlasName, string[] spriteNames, string assemblyPath)
         {
             int maxSize = 1024;
             Texture2D texture2D = new Texture2D(maxSize, maxSize, TextureFormat.ARGB32, false);
@@ -15,7 +15,7 @@ namespace QCommonLib
             Rect[] regions;
 
             for (int i = 0; i < spriteNames.Length; i++)
-                textures[i] = LoadTextureFromAssembly(assembly, assemblyPath + spriteNames[i] + ".png");
+                textures[i] = LoadTextureFromAssembly(Assembly.GetCallingAssembly(), assemblyPath + spriteNames[i] + ".png");
 
             regions = texture2D.PackTextures(textures, 2, maxSize);
 

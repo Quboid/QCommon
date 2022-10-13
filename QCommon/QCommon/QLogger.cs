@@ -55,14 +55,13 @@ namespace QCommonLib
         /// <summary>
         /// Create QLogger instance
         /// </summary>
-        /// <param name="assembly">The mod using QLogger</param>
         /// <param name="isDebug">Override should debug messages be logged?</param>
         /// <param name="logFile">Override the generated path/file name</param>
         /// <param name="location">Override which log(s) minor messages are logged to</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public QLogger(Assembly assembly, bool isDebug = false, string logFile = "", LogLocation location = LogLocation.Mod)
+        public QLogger(bool isDebug = false, string logFile = "", LogLocation location = LogLocation.Mod)
         {
-            AssemblyObject = assembly ?? throw new ArgumentNullException(nameof(assembly));
+            AssemblyObject = Assembly.GetCallingAssembly() ?? throw new ArgumentNullException("QLogger: Failed to find calling assembly");
             LogFile = logFile == "" ? Path.Combine(Application.dataPath, AssemblyName + ".log") : logFile;
             IsDebug = isDebug;
             PreferredLocation = location;
