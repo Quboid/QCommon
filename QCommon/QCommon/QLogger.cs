@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Reflection;
+using System.Runtime;
 using UnityEngine;
 
 namespace QCommonLib
@@ -72,7 +74,22 @@ namespace QCommonLib
             }
 
             AssemblyName details = AssemblyObject.GetName();
-            Info($"{details.Name} v{details.Version.ToString()}");
+            string offset;
+            try
+            {
+                TimeSpan ts = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now); //TimeZoneInfo.Local.BaseUtcOffset;
+                offset = string.Format("{0}:{1:D2}", ts.Hours, ts.Minutes);
+            }
+            catch (Exception)
+            {
+                offset = "Unknown";
+            }
+            Info($"{details.Name} v{details.Version} at " + DateTime.UtcNow.ToString(new CultureInfo("en-GB")) + $" ({offset})");
+        }
+
+        ~QLogger()
+        {
+            Info($"{AssemblyName} closing (" + DateTime.UtcNow.ToString(new CultureInfo("en-GB")) + ")");
         }
 
         public void Debug(string message, string code = "")
