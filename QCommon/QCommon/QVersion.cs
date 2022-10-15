@@ -14,7 +14,11 @@ namespace QCommonLib
 
         public static string Version()
         {
-            Assembly ass = Assembly.GetExecutingAssembly();
+            return Version(Assembly.GetCallingAssembly());
+        }
+
+        public static string Version(Assembly ass)
+        {
             if (ass.GetName().Version.Minor == 0 && ass.GetName().Version.Build == 0)
             {
                 return ass.GetName().Version.Major.ToString() + ".0";
