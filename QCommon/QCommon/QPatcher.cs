@@ -11,10 +11,10 @@ namespace QCommonLib
     public class QPatcher
     {
         private readonly Assembly caller;
-        private string HarmonyId;
+        private readonly string HarmonyId;
+        private readonly bool IsDebug = false;
+        private readonly DEarlyRevert EarlyRevert;
         private bool patched = false;
-        private bool IsDebug = false;
-        private DEarlyRevert EarlyRevert;
 
         private Harmony instance = null;
         public Harmony Instance
@@ -30,6 +30,13 @@ namespace QCommonLib
             set { instance = value; }
         }
 
+        /// <summary>
+        /// Create instance. Should be called early in mod lifecycle, typically during OnEnable
+        /// </summary>
+        /// <param name="id">The mod's Harmony ID</param>
+        /// <param name="earlyDeploy">Optional method to call for patches that need to be deployed before loading</param>
+        /// <param name="earlyRevert">Optional method to clean up the early deployed patches</param>
+        /// <param name="isDebug">Should QLogger output extra debug info?</param>
         public QPatcher(string id, DEarlyDeploy earlyDeploy = null, DEarlyRevert earlyRevert = null, bool isDebug = false)
         {
             caller = Assembly.GetCallingAssembly();
@@ -42,6 +49,9 @@ namespace QCommonLib
         public delegate void DEarlyDeploy(QPatcher patcher);
         public delegate void DEarlyRevert(QPatcher patcher);
 
+        /// <summary>
+        /// Deploys all patches marked with annotation
+        /// </summary>
         public void PatchAll()
         {
             if (patched) return;
@@ -50,25 +60,44 @@ namespace QCommonLib
             HarmonyHelper.DoOnHarmonyReady(() => Instance.PatchAll(caller));
         }
 
+        /// <summary>
+        /// Reverts all patches including ones deployed early
+        /// </summary>
         public void UnpatchAll()
         {
             if (!patched) return;
 
-            if (EarlyRevert != null) EarlyRevert(this);
+            EarlyRevert?.Invoke(this);
             HarmonyHelper.DoOnHarmonyReady(() => Instance.UnpatchAll(HarmonyId));
             patched = false;
         }
 
+        /// <summary>
+        /// Deploy a prefix patch
+        /// </summary>
+        /// <param name="original">The method to patch</param>
+        /// <param name="replacement">The method to prefix <paramref name="original"/></param>
         public void Prefix(MethodInfo original, MethodInfo replacement)
         {
             Instance.Patch(original, prefix: new HarmonyMethod(replacement));
         }
 
+
+        /// <summary>
+        /// Deploy a postfix patch
+        /// </summary>
+        /// <param name="original">The method to patch</param>
+        /// <param name="replacement">The method to postfix <paramref name="original"/></param>
         public void Postfix(MethodInfo original, MethodInfo replacement)
         {
             Instance.Patch(original, postfix: new HarmonyMethod(replacement));
         }
 
+        /// <summary>
+        /// Revert a patched method
+        /// </summary>
+        /// <param name="original">The method that was matched</param>
+        /// <param name="replacement">The method used to patch <paramref name="original"/></param>
         public void Unpatch(MethodInfo original, MethodInfo replacement)
         {
             Instance.Unpatch(original, replacement);

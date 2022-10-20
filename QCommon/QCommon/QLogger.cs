@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime;
 using UnityEngine;
+using System.Text;
 
 namespace QCommonLib
 {
@@ -91,6 +92,8 @@ namespace QCommonLib
             Info($"{AssemblyName} closing (" + DateTime.UtcNow.ToString(new CultureInfo("en-GB")) + ")");
         }
 
+        #region Debug
+        // Print the message to LogLocation only if IsDebug is true
         public void Debug(string message, string code = "")
         {
             if (IsDebug)
@@ -106,7 +109,10 @@ namespace QCommonLib
                 Do(exception.ToString(), LogLevel.Debug, code);
             }
         }
+        #endregion
 
+        #region Info
+        // Print the message to LogLocation
         public void Info(string message, string code = "")
         {
             Do(message, LogLevel.Info, code);
@@ -116,7 +122,10 @@ namespace QCommonLib
         {
             Do(exception.ToString(), LogLevel.Info, code);
         }
+        #endregion
 
+        #region Warning
+        // Print the message everywhere
         public void Warning(string message, string code = "")
         {
             Do(message, LogLevel.Error, code);
@@ -124,9 +133,12 @@ namespace QCommonLib
 
         public void Warning(Exception exception, string code = "")
         {
-            Do(exception.ToString(), LogLevel.Error, code);
+            Do(exception.ToStringNoTrace(), LogLevel.Error, code);
         }
+        #endregion
 
+        #region Error
+        // Print the message everywhere, include stacktrace
         public void Error(string message, string code = "")
         {
             Do(message + NL + new StackTrace().ToString() + NL, LogLevel.Error, code);
@@ -134,8 +146,11 @@ namespace QCommonLib
 
         public void Error(Exception exception, string code = "")
         {
-            Do(exception.ToString(), LogLevel.Error, code);
+            string message = exception.ToString();
+            if (exception.StackTrace is null || exception.StackTrace == "") message += NL + new StackTrace().ToString();
+            Do(message, LogLevel.Error, code);
         }
+        #endregion
 
         internal void Do(string message, LogLevel logLevel, string code)
         {
@@ -178,6 +193,16 @@ namespace QCommonLib
             {
                 UnityEngine.Debug.Log("QLogger failed to log!");
             }
+        }
+    }
+
+    public static class MyExtensions
+    {
+        public static string ToStringNoTrace(this Exception e)
+        {
+            StringBuilder stringBuilder = new StringBuilder(e.GetType().ToString());
+            stringBuilder.Append(": ").Append(e.Message);
+            return stringBuilder.ToString();
         }
     }
 }

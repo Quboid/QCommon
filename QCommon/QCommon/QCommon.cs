@@ -84,6 +84,9 @@ namespace QCommonLib
             return new CultureInfo(lang);
         }
 
+        /// <summary>
+        /// The current game scene (is the player in-game, in map editor, etc)
+        /// </summary>
         public static SceneTypes Scene
         {
             get
