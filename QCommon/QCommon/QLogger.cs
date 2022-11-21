@@ -167,7 +167,7 @@ namespace QCommonLib
                 long fraction = ticks % Stopwatch.Frequency;
                 msg += string.Format($"{secs:n0}.{fraction:D7} | {code}{message}{NL}");
 
-                if (logLevel == LogLevel.Error || ((PreferredLocation & LogLocation.Mod) == LogLocation.Mod))
+                if ((PreferredLocation & LogLocation.Mod) == LogLocation.Mod)
                 {
                     using (StreamWriter w = File.AppendText(LogFile))
                     {

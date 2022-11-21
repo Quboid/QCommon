@@ -79,7 +79,14 @@ namespace QCommonLib
         /// <param name="replacement">The method to prefix <paramref name="original"/></param>
         public void Prefix(MethodInfo original, MethodInfo replacement)
         {
-            Instance.Patch(original, prefix: new HarmonyMethod(replacement));
+            try
+            {
+                Instance.Patch(original, prefix: new HarmonyMethod(replacement));
+            }
+            catch (Exception e)
+            {
+                throw new QPatcherPrefixException(original, replacement, e);
+            }
         }
 
 
@@ -90,7 +97,14 @@ namespace QCommonLib
         /// <param name="replacement">The method to postfix <paramref name="original"/></param>
         public void Postfix(MethodInfo original, MethodInfo replacement)
         {
-            Instance.Patch(original, postfix: new HarmonyMethod(replacement));
+            try
+            {
+                Instance.Patch(original, postfix: new HarmonyMethod(replacement));
+            }
+            catch (Exception e)
+            {
+                throw new QPatcherPostfixException(original, replacement, e);
+            }
         }
 
         /// <summary>
@@ -100,7 +114,70 @@ namespace QCommonLib
         /// <param name="replacement">The method used to patch <paramref name="original"/></param>
         public void Unpatch(MethodInfo original, MethodInfo replacement)
         {
-            Instance.Unpatch(original, replacement);
+            try
+            {
+                Instance.Unpatch(original, replacement);
+            }
+            catch (Exception e)
+            {
+                throw new QPatcherUnpatchException(original, replacement, e);
+            }
+        }
+    }
+
+    public class QPatcherException : Exception
+    {
+        protected string message;
+
+        public override string ToString()
+        {
+            return message;
+        }
+
+        //public QPatcherException() : base()
+        //{
+        //}
+
+        //public QPatcherException(string message) : base(message)
+        //{
+        //}
+
+        //public QPatcherException(string message, Exception innerException) : base(message, innerException)
+        //{
+        //}
+
+        //public QPatcherException(string type, MethodInfo original, MethodInfo replacement)
+        //{
+        //}
+    }
+
+    public class QPatcherPrefixException : QPatcherException
+    {
+        public QPatcherPrefixException(MethodInfo original, MethodInfo replacement, Exception exception)
+        {
+            string orig = (original != null) ? original.Name : "<null>";
+            string replace = (replacement != null) ? replacement.Name : "<null>";
+            message = $"Failed prefix patch:\n{orig} -> {replace}\n{exception.ToString()}";
+        }
+    }
+
+    public class QPatcherPostfixException : QPatcherException
+    {
+        public QPatcherPostfixException(MethodInfo original, MethodInfo replacement, Exception exception)
+        {
+            string orig = (original != null) ? original.Name : "<null>";
+            string replace = (replacement != null) ? replacement.Name : "<null>";
+            message = $"Failed postfix patch:\n{orig} -> {replace}\n{exception.ToString()}";
+        }
+    }
+
+    public class QPatcherUnpatchException : QPatcherException
+    {
+        public QPatcherUnpatchException(MethodInfo original, MethodInfo replacement, Exception exception)
+        {
+            string orig = (original != null) ? original.Name : "<null>";
+            string replace = (replacement != null) ? replacement.Name : "<null>";
+            message = $"Failed to unpatch:\n{orig} -> {replace}\n{exception.ToString()}";
         }
     }
 }
