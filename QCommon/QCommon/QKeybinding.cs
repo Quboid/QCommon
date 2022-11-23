@@ -265,6 +265,7 @@ namespace QCommonLib
             foreach (UIComponent current in component.GetComponentsInChildren<UIComponent>())
             {
                 UITextComponent uITextComponent = current.Find<UITextComponent>("Binding");
+                if (uITextComponent == null) continue;
                 SavedInputKey savedInputKey = (SavedInputKey)uITextComponent.objectUserData;
                 if (this.m_EditingBinding != savedInputKey)
                 {
