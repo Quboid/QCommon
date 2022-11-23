@@ -69,6 +69,7 @@
     <Compile Include="QLogger.cs" />
     <Compile Include="QPatcher.cs" />
     <Compile Include="QTextures.cs" />
+    <Compile Include="QTimer.cs" />
     <Compile Include="QVersion.cs" />
   </ItemGroup>
   <ItemGroup>
