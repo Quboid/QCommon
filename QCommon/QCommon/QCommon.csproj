@@ -68,6 +68,7 @@
     <Compile Include="QKeybinding.cs" />
     <Compile Include="QLogger.cs" />
     <Compile Include="QPatcher.cs" />
+    <Compile Include="QSavedEnum.cs" />
     <Compile Include="QTextures.cs" />
     <Compile Include="QTimer.cs" />
     <Compile Include="QVersion.cs" />
