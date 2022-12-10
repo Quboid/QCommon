@@ -7,24 +7,24 @@ namespace QCommonLib
     /// Wrapper for SavedString so it can load and save Enum values
     /// </summary>
     /// <typeparam name="T">Enum type to save</typeparam>
-    public class QSavedEnum<T>
+    public class QSavedEnum<T> where T : Enum
     {
         protected SavedString m_savedString;
 
         public QSavedEnum(string name, string fileName, T def, bool autoUpdate)
         {
-            m_savedString = new SavedString(name, fileName, Get(def), autoUpdate);
+            m_savedString = new SavedString(name, fileName, GetString(def), autoUpdate);
         }
 
         public T Value
         {
             get
             {
-                return Get(m_savedString.value);
+                return GetEnum(m_savedString.value);
             }
             set
             {
-                m_savedString.value = Get(value);
+                m_savedString.value = GetString(value);
             }
         }
 
@@ -57,7 +57,7 @@ namespace QCommonLib
         /// </summary>
         /// <param name="e">The choosen enum entry</param>
         /// <returns>The enum's string</returns>
-        protected string Get(T e)
+        protected static string GetString(T e)
         {
             return e.ToString();
         }
@@ -67,7 +67,7 @@ namespace QCommonLib
         /// </summary>
         /// <param name="s">The string to find</param>
         /// <returns>The enum entry</returns>
-        protected T Get(string s)
+        protected static T GetEnum(string s)
         {
             return (T)Enum.Parse(typeof(T), s);
         }
