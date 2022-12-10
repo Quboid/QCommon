@@ -1,12 +1,36 @@
-﻿using ColossalFramework.UI;
+﻿using ColossalFramework.Threading;
+using ColossalFramework.UI;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using UnityEngine;
 
 namespace QCommonLib
 {
     public static class QTextures
-    { 
+    {
+        public static UITextureAtlas CreateEmptyTextureAtlas(string atlasName, int maxSize = 1024)
+        {
+            UITextureAtlas textureAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
+            textureAtlas.material = UnityEngine.Object.Instantiate<Material>(UIView.GetAView().defaultAtlas.material);
+            textureAtlas.material.mainTexture = new Texture2D(maxSize, maxSize, TextureFormat.ARGB32, false);
+            textureAtlas.name = atlasName;
+            textureAtlas.padding = 2;
+            return textureAtlas;
+        }
+
+        public static Texture2D GetTextureFromAtlas(UITextureAtlas atlas, string name)
+        {
+            foreach (UITextureAtlas.SpriteInfo sprite in atlas.sprites)
+            {
+                if (sprite == null) continue;
+                if (sprite.texture == null) continue;
+                if (sprite.texture.name == null) continue;
+                if (sprite.texture.name == name) return sprite.texture;
+            }
+            throw new System.Exception($"Sprite {name} not found.");
+        }
+
         public static UITextureAtlas CreateTextureAtlas(string atlasName, string[] spriteNames, string assemblyPath)
         {
             int maxSize = 1024;
@@ -19,11 +43,8 @@ namespace QCommonLib
 
             regions = texture2D.PackTextures(textures, 2, maxSize);
 
-            UITextureAtlas textureAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
-            Material material = UnityEngine.Object.Instantiate<Material>(UIView.GetAView().defaultAtlas.material);
-            material.mainTexture = texture2D;
-            textureAtlas.material = material;
-            textureAtlas.name = atlasName;
+            UITextureAtlas textureAtlas = CreateEmptyTextureAtlas(atlasName);
+            textureAtlas.material.mainTexture = texture2D;
 
             for (int i = 0; i < spriteNames.Length; i++)
             {
