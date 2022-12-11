@@ -19,14 +19,14 @@ namespace QCommonLib
             return textureAtlas;
         }
 
-        public static Texture2D GetTextureFromAtlas(UITextureAtlas atlas, string name)
+        public static Texture2D GetTextureFromAtlas(UITextureAtlas atlas, string name, QLogger Log)
         {
-            foreach (UITextureAtlas.SpriteInfo sprite in atlas.sprites)
+            foreach (UITextureAtlas.SpriteInfo spriteInfo in atlas.sprites)
             {
-                if (sprite == null) continue;
-                if (sprite.texture == null) continue;
-                if (sprite.texture.name == null) continue;
-                if (sprite.texture.name == name) return sprite.texture;
+                if (!(spriteInfo == null) && !(spriteInfo.texture == null) && spriteInfo.texture.name != null && spriteInfo.texture.name == name)
+                {
+                    return spriteInfo.texture;
+                }
             }
             throw new System.Exception($"Sprite {name} not found.");
         }
