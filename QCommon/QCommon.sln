@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QCommon", "QCommon\QCommon.csproj", "{6246F91E-8994-495B-A832-25B71B15E061}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QCommon Shared", "QCommon\QCommon Shared.shproj", "{233B2695-91AD-4B85-A778-1FFF467FAE35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,5 +23,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8866EE4E-5A78-484F-8054-B1A093CF6D9F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		QCommon\QCommon Shared.projitems*{233b2695-91ad-4b85-a778-1fff467fae35}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
