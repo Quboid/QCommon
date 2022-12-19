@@ -15,7 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)QCommon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QKeybinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)QPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QSavedEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QTimer.cs" />

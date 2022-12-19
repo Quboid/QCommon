@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QCommon", "QCommon\QCommon.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QCommon Shared", "QCommon\QCommon Shared.shproj", "{233B2695-91AD-4B85-A778-1FFF467FAE35}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QCommon Harmony", "QCommon\QCommon Harmony.shproj", "{9D9EC2D2-3CEE-42E2-8296-FA667D0B73E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +28,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		QCommon\QCommon Shared.projitems*{233b2695-91ad-4b85-a778-1fff467fae35}*SharedItemsImports = 13
+		QCommon\QCommon Harmony.projitems*{9d9ec2d2-3cee-42e2-8296-fa667d0b73e6}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
