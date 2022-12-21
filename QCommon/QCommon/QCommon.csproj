@@ -63,18 +63,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QCommon.cs" />
+    <Compile Include="Shared\QCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QKeybinding.cs" />
-    <Compile Include="QLogger.cs" />
-    <Compile Include="QPatcher.cs" />
-    <Compile Include="QSavedEnum.cs" />
-    <Compile Include="QTextures.cs" />
-    <Compile Include="QTimer.cs" />
-    <Compile Include="QVersion.cs" />
+    <Compile Include="Shared\QKeybinding.cs" />
+    <Compile Include="Shared\QLogger.cs" />
+    <Compile Include="Shared\QSavedEnum.cs" />
+    <Compile Include="Shared\QTextures.cs" />
+    <Compile Include="Shared\QTimer.cs" />
+    <Compile Include="Shared\QVersion.cs" />
+    <Compile Include="Harmony\QPatcher.cs" />
+    <Compile Include="Shared\UI\QToast.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="Harmony\packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

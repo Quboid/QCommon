@@ -16,5 +16,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)QTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\QToast.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)UI\Toast\" />
   </ItemGroup>
 </Project>
