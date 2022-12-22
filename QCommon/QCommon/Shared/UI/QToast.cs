@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -14,9 +15,8 @@ namespace QCommonLib.UI
 
         private readonly Dictionary<string, UIComponent> Frame = new Dictionary<string, UIComponent>();
 
-        public override void Start()
+        public QToast()
         {
-            base.Start();
             autoLayout = false;
             autoSize = false;
             atlas = GetAtlas();
@@ -40,37 +40,49 @@ namespace QCommonLib.UI
 
         public void Initialise(Vector2 position, Vector2 size)
         {
-            relativePosition = position;
+            absolutePosition = position;
             this.size = size;
 
             foreach (var pair in Frame) InitPanel(pair.Value);
 
             Frame["TopContainer"].relativePosition = Vector3.zero;
             Frame["TopContainer"].size = new Vector2(size.x, FramePadding.top);
+            Frame["TopContainer"].name = "QToast_TopContainer";
             Frame["TopLeft"].relativePosition = Vector3.zero;
             Frame["TopLeft"].size = new Vector2(FramePadding.left, FramePadding.top);
+            Frame["TopLeft"].name = "QToast_TopLeft";
             Frame["Top"].relativePosition = new Vector3(FramePadding.left, 0);
             Frame["Top"].size = new Vector2(size.x - FramePadding.left - FramePadding.right, FramePadding.top);
+            Frame["Top"].name = "QToast_Top";
             Frame["TopRight"].relativePosition = new Vector3(size.x - FramePadding.right, 0);
             Frame["TopRight"].size = new Vector2(FramePadding.right, FramePadding.top);
+            Frame["TopRight"].name = "QToast_TopRight";
 
             Frame["MidContainer"].relativePosition = new Vector3(0, FramePadding.top);
             Frame["MidContainer"].size = new Vector2(size.x, size.y - FramePadding.top - FramePadding.bottom);
+            Frame["MidContainer"].name = "QToast_MidContainer";
             Frame["MidLeft"].relativePosition = Vector3.zero;
             Frame["MidLeft"].size = new Vector2(FramePadding.left, Frame["MidContainer"].size.y);
+            Frame["MidLeft"].name = "QToast_MidLeft";
             Frame["Mid"].relativePosition = new Vector3(FramePadding.left, 0);
             Frame["Mid"].size = new Vector2(Frame["MidContainer"].size.x - FramePadding.left - FramePadding.right, Frame["MidContainer"].size.y);
+            Frame["Mid"].name = "QToast_Mid";
             Frame["MidRight"].relativePosition = new Vector3(Frame["MidContainer"].size.x - FramePadding.right, 0);
             Frame["MidRight"].size = new Vector2(FramePadding.right, Frame["MidContainer"].size.y);
+            Frame["MidRight"].name = "QToast_MidRight";
 
             Frame["BottomContainer"].relativePosition = new Vector3(0, size.y - FramePadding.bottom);
             Frame["BottomContainer"].size = new Vector2(size.x, FramePadding.bottom);
+            Frame["BottomContainer"].name = "QToast_BottomContainer";
             Frame["BottomLeft"].relativePosition = Vector3.zero;
             Frame["BottomLeft"].size = new Vector2(FramePadding.left, FramePadding.bottom);
+            Frame["BottomLeft"].name = "QToast_BottomLeft";
             Frame["Bottom"].relativePosition = new Vector3(FramePadding.left, 0);
             Frame["Bottom"].size = new Vector2(Frame["BottomContainer"].size.x - FramePadding.left - FramePadding.right, FramePadding.bottom);
+            Frame["Bottom"].name = "QToast_Bottom";
             Frame["BottomRight"].relativePosition = new Vector3(Frame["BottomContainer"].size.x - FramePadding.right, 0);
             Frame["BottomRight"].size = new Vector2(FramePadding.right, FramePadding.bottom);
+            Frame["BottomRight"].name = "QToast_BottomRight";
 
             ((UISprite)Frame["TopLeft"]).spriteName = "TopLeft";
             ((UITiledSprite)Frame["Top"]).spriteName = "Top";
@@ -119,7 +131,7 @@ namespace QCommonLib.UI
                 "TopRight"
             };
 
-            s_atlas = QTextures.CreateTextureAtlas("QCommonToast", spriteNames, "QCommon.Shared.UI.Toast.");
+            s_atlas = QTextures.CreateTextureAtlas("QToast", spriteNames, Assembly.GetAssembly(typeof(QToast)).GetName().Name + ".UI.Toast.");
             return s_atlas;
         }
     }

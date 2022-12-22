@@ -19,13 +19,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\QToast.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\Bottom.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\BottomLeft.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\BottomRight.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\Left.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\Right.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\Top.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\TopLeft.png" />
-    <Content Include="$(MSBuildThisFileDirectory)UI\Toast\TopRight.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\Bottom.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\BottomLeft.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\BottomRight.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\Left.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\Right.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\Top.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\TopLeft.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\TopRight.png" />
   </ItemGroup>
 </Project>
