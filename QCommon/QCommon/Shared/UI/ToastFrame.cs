@@ -1,18 +1,149 @@
 ﻿using ColossalFramework.UI;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace QCommonLib.UI
 {
-    internal abstract class Frame
+    internal class ToastFrame
     {
         internal static readonly RectOffset Padding = new RectOffset(15, 15, 30, 15);
         private static UITextureAtlas s_atlas = null;
 
-        internal abstract UIComponent Make(QToast toast, string name);
+        internal int ArrowOffset { get; private set; }
+        internal QToast Toast { get; private set; }
+        internal Dictionary<string, UIComponent> Frame { get; private set; } = new Dictionary<string, UIComponent>();
+
+        internal ToastFrame(QToast toast, int arrowOffset)
+        {
+            Toast = toast;
+            ArrowOffset = arrowOffset;
+
+            Dictionary<string, FrameElement> elements = new Dictionary<string, FrameElement>()
+            {
+                { "TopContainer",       new FrameContainer(Vector3.zero, new Vector2(toast.size.x, Padding.top)) },
+                { "MidContainer",       new FrameContainer(new Vector3(0, Padding.top), new Vector2(toast.size.x, toast.size.y - Padding.top - Padding.bottom)) },
+                { "BottomContainer",    new FrameContainer(new Vector3(0, toast.size.y - Padding.bottom), new Vector2(toast.size.x, Padding.bottom)) },
+
+                { "TopLeft",            new FrameSprite("TopContainer",     "TopLeft",      UISpriteFlip.None,              UIHorizontalAlignment.Left, UIVerticalAlignment.Top) },
+                { "Top",                new FrameSprite("TopContainer",     "Top",          UISpriteFlip.None,              UIHorizontalAlignment.Center, UIVerticalAlignment.Top) },
+                { "TopRight",           new FrameSprite("TopContainer",     "TopLeft",      UISpriteFlip.FlipHorizontal,    UIHorizontalAlignment.Right, UIVerticalAlignment.Top) },
+
+                { "MidLeft",            new FrameSprite("MidContainer",     "Left",         UISpriteFlip.None,              UIHorizontalAlignment.Left, UIVerticalAlignment.Middle) },
+                { "MidRight",           new FrameSprite("MidContainer",     "Left",         UISpriteFlip.FlipHorizontal,    UIHorizontalAlignment.Right, UIVerticalAlignment.Middle) },
+
+                { "BottomLeft",         new FrameSprite("BottomContainer",  "BottomLeft",   UISpriteFlip.None,              UIHorizontalAlignment.Left, UIVerticalAlignment.Bottom) },
+                { "Bottom",             new FrameSprite("BottomContainer",  "Bottom",       UISpriteFlip.None,              UIHorizontalAlignment.Center, UIVerticalAlignment.Bottom) },
+                { "BottomRight",        new FrameSprite("BottomContainer",  "BottomLeft",   UISpriteFlip.FlipHorizontal,    UIHorizontalAlignment.Right, UIVerticalAlignment.Bottom) },
+            };
+
+            foreach (var pair in Frame)
+            {
+                pair.Value.parent.RemoveUIComponent(pair.Value);
+            }
+            Frame.Clear();
+            foreach (var pair in elements)
+            {
+                Frame.Add(pair.Key, pair.Value.Make(this, pair.Key));
+            }
+
+            Frame.Add("Mid", MakeMid());
+            Frame.Add("Arrow", MakeArrow());
+
+            toast.CloseBtn = toast.AddUIComponent<UIButton>();
+            toast.CloseBtn.name = toast.name + "_CloseBtn";
+            toast.CloseBtn.atlas = GetAtlas();
+            toast.CloseBtn.size = new Vector2(24, 24);
+            toast.CloseBtn.relativePosition = new Vector2(toast.size.x - 32, 8);
+            toast.CloseBtn.normalFgSprite = "Close";
+            toast.CloseBtn.hoveredFgSprite = "CloseHover";
+            toast.CloseBtn.eventClicked += (c, p) => { toast.Hide(); };
+
+            toast.Title = toast.AddUIComponent<UILabel>();
+            toast.Title.autoSize = false;
+            toast.Title.name = toast.name + "_Title";
+            toast.Title.relativePosition = new Vector2(0, 10);
+            toast.Title.textColor = new Color32(0, 0, 0, 255);
+            toast.Title.textScale = 1.2f;
+            toast.Title.textAlignment = UIHorizontalAlignment.Center;
+            toast.Title.text = "";
+
+            toast.Body = toast.AddUIComponent<UILabel>();
+            toast.Body.autoSize = false;
+            toast.Body.name = toast.name + "_Body";
+            toast.Body.relativePosition = new Vector2(Padding.left, Padding.top + 8);
+            toast.Body.textColor = new Color32(10, 10, 12, 225);
+            toast.Body.width = Toast.size.x - Padding.left - Padding.right;
+            toast.Body.autoHeight = true;
+            toast.Body.wordWrap = true;
+            toast.Body.text = "";
+        }
+
+        //internal Vector4 GetBodySize()
+        //{
+        //    return new Vector4(Padding.left, Padding.top + 8, Toast.size.x - Padding.left - Padding.right, Toast.size.y - Padding.top - Padding.bottom - 8 - (ArrowOffset == -1 ? 0 : 45));
+        //}
+
+        internal void SetHeight()
+        {
+            float oldMidHeight = Frame["MidContainer"].height;
+            float newMidHeight = Toast.Body.height + 8;
+            float diff = oldMidHeight - newMidHeight;
+
+            Frame["MidLeft"].height -= diff;
+            Frame["Mid"].height -= diff;
+            Frame["MidRight"].height -= diff;
+            Frame["MidContainer"].height -= diff;
+            Frame["BottomContainer"].relativePosition -= new Vector3(0, diff, 0);
+            Frame["Arrow"].relativePosition -= new Vector3(0, diff, 0);
+            Toast.height -= diff;
+
+            UICanvasSprite mid = (UICanvasSprite)Frame["Mid"];
+            mid.ResizeCanvas(0, 0, mid.size.x, mid.size.y);
+            Debug.Log($"AAA2 {mid.size}");
+        }
+
+        internal UICanvasSprite MakeMid()
+        {
+            UICanvasSprite mid = Frame["MidContainer"].AddUIComponent<UICanvasSprite>();
+            InitPanel(mid);
+
+            mid.relativePosition = new Vector3(Padding.left, 0);
+            mid.size = new Vector2(Frame["MidContainer"].size.x - Padding.left - Padding.right, Frame["MidContainer"].size.y);
+            mid.name = Toast.name + "_Mid";
+            Color32[] textureColours = new Color32[16];
+            for (int i = 0; i < textureColours.Length; i++) textureColours[i] = new Color32(255, 243, 142, 255);
+            Texture2D texture = new Texture2D(4, 4, TextureFormat.ARGB32, false);
+            texture.SetPixels32(0, 0, 4, 4, textureColours);
+            texture.name = Toast.name + "_" + "_MidTexture";
+            texture.Apply();
+            mid.texture = texture;
+            mid.ResizeCanvas(0, 0, mid.size.x, mid.size.y);
+            Debug.Log($"AAA1 {mid.size}");
+
+            return mid;
+        }
+
+        internal UISprite MakeArrow()
+        {
+            UISprite arrow = Toast.AddUIComponent<UISprite>();
+            arrow.name = Toast.name + "_Arrow";
+            InitPanel(arrow);
+
+            if (ArrowOffset == -1)
+            {
+                arrow.isVisible = false;
+            }
+            else
+            {
+                arrow.isVisible = true;
+                Toast.size += new Vector2(0, 45);
+                arrow.relativePosition = new Vector2(Padding.left + ArrowOffset, Frame["BottomContainer"].relativePosition.y);
+                arrow.spriteName = "DownArrow";
+            }
+
+            return arrow;
+        }
 
         internal static void InitPanel(UIComponent panel)
         {
@@ -47,47 +178,16 @@ namespace QCommonLib.UI
             s_atlas = QTextures.CreateTextureAtlas("QToast", spriteNames, Assembly.GetAssembly(typeof(QToast)).GetName().Name + ".UI.Toast.");
             return s_atlas;
         }
-
-        internal static void MakeMid(QToast toast)
-        {
-            toast.frame.Add("Mid", toast.frame["MidContainer"].AddUIComponent<UICanvasSprite>());
-            UICanvasSprite mid = (UICanvasSprite)toast.frame["Mid"];
-            InitPanel(mid);
-
-            mid.relativePosition = new Vector3(Padding.left, 0);
-            mid.size = new Vector2(toast.frame["MidContainer"].size.x - Padding.left - Padding.right, toast.frame["MidContainer"].size.y);
-            mid.name = "QToast_Mid";
-            Color32[] textureColours = new Color32[16];
-            for (int i = 0; i < textureColours.Length; i++) textureColours[i] = new Color32(255, 243, 142, 255);
-            Texture2D texture = new Texture2D(4, 4, TextureFormat.ARGB32, false);
-            texture.SetPixels32(0, 0, 4, 4, textureColours);
-            texture.name = "MidTexture";
-            texture.Apply();
-            mid.texture = texture;
-            mid.ResizeCanvas(0, 0, mid.size.x, mid.size.y);
-        }
-
-        internal static void MakeArrow(QToast toast, int arrowOffset)
-        {
-            toast.frame.Add("Arrow", toast.AddUIComponent<UISprite>());
-            UISprite arrow = (UISprite)toast.frame["Arrow"];
-            InitPanel(arrow);
-
-            if (arrowOffset == -1)
-            {
-                arrow.isVisible = false;
-            }
-            else
-            {
-                arrow.isVisible = true;
-                toast.size += new Vector2(0, 45);
-                arrow.relativePosition = new Vector2(Padding.left + arrowOffset, toast.frame["BottomContainer"].relativePosition.y);
-                arrow.spriteName = "DownArrow";
-            }
-        }
     }
 
-    internal class FrameContainer : Frame
+    internal abstract class FrameElement
+    {
+        internal abstract UIComponent Make(ToastFrame frame, string name);
+        protected static RectOffset Padding = ToastFrame.Padding;
+
+    }
+
+    internal class FrameContainer : FrameElement
     {
         internal Vector3 relativePosition;
         internal Vector2 size;
@@ -98,11 +198,11 @@ namespace QCommonLib.UI
             this.size = size;
         }
 
-        internal override UIComponent Make(QToast toast, string name)
+        internal override UIComponent Make(ToastFrame frame, string name)
         {
-            UIPanel container = toast.AddUIComponent<UIPanel>();
-            InitPanel(container);
-            container.name = "QToast_" + name;
+            UIPanel container = frame.Toast.AddUIComponent<UIPanel>();
+            ToastFrame.InitPanel(container);
+            container.name = frame.Toast.name + "_" + name;
             container.relativePosition = relativePosition;
             container.size = size;
 
@@ -110,7 +210,7 @@ namespace QCommonLib.UI
         }
     }
 
-    internal class FrameSprite : Frame
+    internal class FrameSprite : FrameElement
     {
         internal string parentName;
         internal string spriteName;
@@ -127,12 +227,12 @@ namespace QCommonLib.UI
             this.vAlign = vAlign;
         }
 
-        internal override UIComponent Make(QToast toast, string name)
+        internal override UIComponent Make(ToastFrame frame, string name)
         {
-            UIComponent parent = toast.frame[parentName];
+            UIComponent parent = frame.Frame[parentName];
             UISprite sprite = parent.AddUIComponent<UISprite>();
-            InitPanel(sprite);
-            sprite.name = "QToast_" + name;
+            ToastFrame.InitPanel(sprite);
+            sprite.name = frame.Toast.name + "_" + name;
 
             int posX = 0, posY = 0, sizeX = 0, sizeY = 0;
 
