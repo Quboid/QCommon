@@ -6,15 +6,15 @@ namespace QCommonLib.UI
 {
     internal class QToast : UIPanel
     {
-        public static QToast Factory(string name, Vector2 position, Vector2 size, int arrowOffset = -1, bool autoHeight = false)
+        public static QToast Factory(string name, Vector2 position, Vector2 size, int arrowOffset = -1, PanelVAlignment panelVAlign = PanelVAlignment.None)
         {
             QToast instance = UIView.GetAView().AddUIComponent(typeof(QToast)) as QToast;
-            instance.Initialise(name, position, size, arrowOffset, autoHeight);
+            instance.Initialise(name, position, size, arrowOffset, panelVAlign);
 
             return instance;
         }
 
-        private bool autoSetHeight = false;
+        internal PanelVAlignment autoPanelVAlign = PanelVAlignment.None;
         private bool initialised = false;
 
         private UILabel title = null;
@@ -49,9 +49,9 @@ namespace QCommonLib.UI
             isVisible = false;
         }
 
-        public void Initialise(string name, Vector2 position, Vector2 size, int arrowOffset = -1, bool autoHeight = false)
+        public void Initialise(string name, Vector2 position, Vector2 size, int arrowOffset = -1, PanelVAlignment autoVAlign = PanelVAlignment.None)
         {
-            autoSetHeight = autoHeight;
+            autoPanelVAlign = autoVAlign;
             this.name = "QToast_" + name;
 
             absolutePosition = position;
@@ -83,12 +83,10 @@ namespace QCommonLib.UI
             Title.relativePosition = new Vector2((width / 2) - (Title.width / 2), Title.relativePosition.y);
             Body.text = bodyText;
 
-            if (autoSetHeight)
+            if (autoPanelVAlign != PanelVAlignment.None)
             {
                 frame.SetHeight();
             }
-            //Body.area = frame.GetBodySize();
-            //Body.PerformLayout();
         }
     }
 }

@@ -9,6 +9,7 @@ namespace QCommonLib.UI
     {
         internal static readonly RectOffset Padding = new RectOffset(15, 15, 30, 15);
         private static UITextureAtlas s_atlas = null;
+        private static Texture2D s_midTexture = null;
 
         internal int ArrowOffset { get; private set; }
         internal QToast Toast { get; private set; }
@@ -86,21 +87,26 @@ namespace QCommonLib.UI
 
         internal void SetHeight()
         {
+            UICanvasSprite mid = (UICanvasSprite)Frame["Mid"];
             float oldMidHeight = Frame["MidContainer"].height;
             float newMidHeight = Toast.Body.height + 8;
-            float diff = oldMidHeight - newMidHeight;
+            float delta = oldMidHeight - newMidHeight;
 
-            Frame["MidLeft"].height -= diff;
-            Frame["Mid"].height -= diff;
-            Frame["MidRight"].height -= diff;
-            Frame["MidContainer"].height -= diff;
-            Frame["BottomContainer"].relativePosition -= new Vector3(0, diff, 0);
-            Frame["Arrow"].relativePosition -= new Vector3(0, diff, 0);
-            Toast.height -= diff;
+            Frame["MidLeft"].height -= delta;
+            Frame["Mid"].height -= delta;
+            Frame["MidRight"].height -= delta;
+            Frame["MidContainer"].height -= delta;
+            Frame["BottomContainer"].relativePosition -= new Vector3(0, delta, 0);
+            Frame["Arrow"].relativePosition -= new Vector3(0, delta, 0);
+            Toast.height -= delta;
 
-            UICanvasSprite mid = (UICanvasSprite)Frame["Mid"];
             mid.ResizeCanvas(0, 0, mid.size.x, mid.size.y);
-            Debug.Log($"AAA2 {mid.size}");
+            mid.texture = GetMidTexture();
+
+            if (Toast.autoPanelVAlign == PanelVAlignment.Bottom)
+            {
+                Toast.relativePosition = new Vector3(Toast.relativePosition.x, Toast.relativePosition.y + delta, Toast.relativePosition.z);
+            }
         }
 
         internal UICanvasSprite MakeMid()
@@ -111,15 +117,8 @@ namespace QCommonLib.UI
             mid.relativePosition = new Vector3(Padding.left, 0);
             mid.size = new Vector2(Frame["MidContainer"].size.x - Padding.left - Padding.right, Frame["MidContainer"].size.y);
             mid.name = Toast.name + "_Mid";
-            Color32[] textureColours = new Color32[16];
-            for (int i = 0; i < textureColours.Length; i++) textureColours[i] = new Color32(255, 243, 142, 255);
-            Texture2D texture = new Texture2D(4, 4, TextureFormat.ARGB32, false);
-            texture.SetPixels32(0, 0, 4, 4, textureColours);
-            texture.name = Toast.name + "_" + "_MidTexture";
-            texture.Apply();
-            mid.texture = texture;
+            mid.texture = GetMidTexture();
             mid.ResizeCanvas(0, 0, mid.size.x, mid.size.y);
-            Debug.Log($"AAA1 {mid.size}");
 
             return mid;
         }
@@ -177,6 +176,27 @@ namespace QCommonLib.UI
 
             s_atlas = QTextures.CreateTextureAtlas("QToast", spriteNames, Assembly.GetAssembly(typeof(QToast)).GetName().Name + ".UI.Toast.");
             return s_atlas;
+        }
+
+        internal static Texture2D GetMidTexture()
+        {
+            if (s_midTexture == null)
+            {
+
+                Color32[] textureColours = new Color32[16];
+                for (int i = 0; i < textureColours.Length; i++) textureColours[i] = new Color32(255, 243, 178, 255);
+                Texture2D texture = new Texture2D(4, 4, TextureFormat.ARGB32, false);
+                texture.SetPixels32(0, 0, 4, 4, textureColours);
+                texture.name = "QToast_MidTexture";
+                texture.Apply();
+                s_midTexture = texture;
+            }
+
+            Texture2D copy = new Texture2D(4, 4, TextureFormat.ARGB32, false);
+            copy.LoadRawTextureData(s_midTexture.GetRawTextureData());
+            copy.Apply();
+
+            return copy;
         }
     }
 
@@ -276,5 +296,12 @@ namespace QCommonLib.UI
 
             return sprite;
         }
+    }
+
+    internal enum PanelVAlignment
+    {
+        None,
+        Top,
+        Bottom
     }
 }
