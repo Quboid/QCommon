@@ -58,7 +58,7 @@ namespace QCommonLib.UI
             toast.CloseBtn.relativePosition = new Vector2(toast.size.x - 32, 8);
             toast.CloseBtn.normalFgSprite = "Close";
             toast.CloseBtn.hoveredFgSprite = "CloseHover";
-            toast.CloseBtn.eventClicked += (c, p) => { toast.Hide(); };
+            toast.CloseBtn.eventClicked += (c, p) => { toast.Close(); };
 
             toast.Title = toast.AddUIComponent<UILabel>();
             toast.Title.autoSize = false;
@@ -298,7 +298,7 @@ namespace QCommonLib.UI
         }
     }
 
-    internal enum PanelVAlignment
+    public enum PanelVAlignment
     {
         None,
         Top,

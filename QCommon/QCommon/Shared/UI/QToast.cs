@@ -4,17 +4,19 @@ using UnityEngine;
 
 namespace QCommonLib.UI
 {
-    internal class QToast : UIPanel
+    public class QToast : QPopup
     {
-        public static QToast Factory(string name, Vector2 position, Vector2 size, int arrowOffset = -1, PanelVAlignment panelVAlign = PanelVAlignment.None)
-        {
-            QToast instance = UIView.GetAView().AddUIComponent(typeof(QToast)) as QToast;
-            instance.Initialise(name, position, size, arrowOffset, panelVAlign);
+        //public static QToast Factory(string name, Vector2 position, Vector2 size, int arrowOffset = -1, PanelVAlignment panelVAlign = PanelVAlignment.None)
+        //{
+        //    QToast instance = UIView.GetAView().AddUIComponent(typeof(QToast)) as QToast;
+        //    instance.Initialise(name, position, size, arrowOffset, panelVAlign);
 
-            return instance;
-        }
+        //    return instance;
+        //}
 
+        protected override bool GrabFocus => false;
         internal PanelVAlignment autoPanelVAlign = PanelVAlignment.None;
+        internal int arrowOffset;
         private bool initialised = false;
 
         private UILabel title = null;
@@ -39,25 +41,15 @@ namespace QCommonLib.UI
         }
 
         internal ToastFrame frame;
-        //internal readonly Dictionary<string, UIComponent> frame = new Dictionary<string, UIComponent>();
 
-        public QToast()
+        public override void Start()
         {
+            name = "QToast_" + name;
+            atlas = ToastFrame.GetAtlas();
+            size = new Vector2(Mathf.Clamp(size.x, 100f, 500f), Mathf.Clamp(size.y, 80f, 400f));
+            canFocus = true;
             autoLayout = false;
             autoSize = false;
-            atlas = ToastFrame.GetAtlas();
-            isVisible = false;
-        }
-
-        public void Initialise(string name, Vector2 position, Vector2 size, int arrowOffset = -1, PanelVAlignment autoVAlign = PanelVAlignment.None)
-        {
-            autoPanelVAlign = autoVAlign;
-            this.name = "QToast_" + name;
-
-            absolutePosition = position;
-            size.x = Mathf.Clamp(size.x, 100f, 500f);
-            size.y = Mathf.Clamp(size.y, 80f, 400f);
-            this.size = size;
 
             frame = new ToastFrame(this, arrowOffset);
             initialised = true;
@@ -77,7 +69,7 @@ namespace QCommonLib.UI
             base.Hide();
         }
 
-        public void SetText(string titleText, string bodyText)
+        public override void SetText(string titleText, string bodyText)
         {
             Title.text = titleText;
             Title.relativePosition = new Vector2((width / 2) - (Title.width / 2), Title.relativePosition.y);

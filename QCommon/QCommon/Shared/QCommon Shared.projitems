@@ -16,6 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)QTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\QPopup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\QPopupWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\QToast.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\ToastFrame.cs" />
   </ItemGroup>
