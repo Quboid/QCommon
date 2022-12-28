@@ -54,6 +54,19 @@ namespace QCommonLib
         }
 
         /// <summary>
+        /// Check if an assembly of another game mod exists
+        /// </summary>
+        /// <param name="modName">The IUserMod class name (lowercase)</param>
+        /// <param name="assName">The assembly name (lowercase)</param>
+        /// <param name="assNameExcept">An assembly name exception to skip even if matches previous parameter</param>
+        /// <param name="onlyEnabled">Limit result to enabled mods?</param>
+        /// <returns>Game mod's assembly</returns>
+        public static bool CheckAssembly(string modName, string assName, string assNameExcept = "", bool onlyEnabled = true)
+        {
+            return GetAssembly(modName, assName, assNameExcept, onlyEnabled) != null;
+        }
+
+        /// <summary>
         /// Dump a list of all mods (assemblies and names) to the output log
         /// </summary>
         public static void DumpMods()
