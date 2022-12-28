@@ -1,5 +1,6 @@
 ﻿using ColossalFramework;
 using ColossalFramework.UI;
+using Epic.OnlineServices.Presence;
 using System;
 using UnityEngine;
 
@@ -7,18 +8,35 @@ namespace QCommonLib.UI
 {
     public abstract class QPopup : UIPanel
     {
-        protected virtual bool GrabFocus => true;
+        // Consider these properties as abstract; children must override
+        protected virtual bool GrabFocus => throw new NotImplementedException();
+        protected virtual bool ShouldShow => throw new NotImplementedException();
 
         public static QPopup Open(Type type)
         {
-            QPopup instance = UIView.GetAView().AddUIComponent(type) as QPopup;
+            GameObject gameObject = new GameObject(type.Name, type);
+            QPopup popupPanel = gameObject.GetComponent(type) as QPopup;
+
+            if (!popupPanel.ShouldShow)
+            {
+                Destroy(gameObject);
+                return null;
+            }
+
+            QPopup instance = UIView.GetAView().AttachUIComponent(popupPanel.gameObject) as QPopup;
+
             if (instance.GrabFocus) UIView.PushModal(instance);
-            Debug.Log($"AAA01 {instance.GrabFocus} {UIView.ModalInputCount()}");
             return instance;
         }
 
-        public void Close()
+        public virtual void Close()
         {
+            if (!ShouldShow)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             if (GrabFocus)
             {
                 UIView.PopModal();
@@ -36,7 +54,6 @@ namespace QCommonLib.UI
                 }
             }
 
-            Debug.Log($"AAA02 {GrabFocus} {UIView.ModalInputCount()}");
             isVisible = false;
             Destroy(this.gameObject);
         }
@@ -98,6 +115,8 @@ namespace QCommonLib.UI
 
     public class ExampleWindow : QPopupWindow
     {
+        protected override bool ShouldShow => true;
+
         public override void Start()
         {
             base.Start();
@@ -118,6 +137,8 @@ namespace QCommonLib.UI
 
     public class ExampleToast : QToast
     {
+        protected override bool ShouldShow => true;
+
         public override void Start()
         {
             size = new Vector2(400, 300);
@@ -126,13 +147,8 @@ namespace QCommonLib.UI
             autoPanelVAlign = PanelVAlignment.Bottom;
             arrowOffset = 25;
 
-            Debug.Log($"BBB01");
             base.Start();
-            Debug.Log($"BBB02");
 
-            // m_toast = QToast.Factory("Main", new Vector2(500, 200), new Vector2(400, 300), 50, PanelVAlignment.Bottom);
-
-            //Initialise("ExampleToast", 25);
             SetText("Hello", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sem ligula, semper a enim quis, volutpat accumsan magna. Sed tristique tortor nec sem lacinia, quis venenatis est porta.\n\n" +
                 "Suspendisse laoreet blandit vehicula. Nunc tincidunt quam purus, in aliquet ligula faucibus ac. Phasellus vulputate, turpis aliquet viverra lacinia, ex mi consectetur.");
         }

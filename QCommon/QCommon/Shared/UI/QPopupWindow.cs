@@ -6,7 +6,9 @@ namespace QCommonLib.UI
 {
     public abstract class QPopupWindow : QPopup
     {
-        public UIButton closeTop, closeBottom;
+        protected override bool GrabFocus => true;
+        protected virtual bool IncludeBottomButtonGap => false;
+        public UIButton closeBtn, okBtn;
         public UILabel blurb, title;
         public Vector2 defaultSize = new Vector2(400f, 300f);
 
@@ -24,18 +26,18 @@ namespace QCommonLib.UI
             dragHandle.target = parent;
             dragHandle.relativePosition = Vector3.zero;
 
-            closeTop = AddUIComponent<UIButton>();
-            closeTop.size = new Vector2(30f, 30f);
-            closeTop.text = "X";
-            closeTop.textScale = 0.9f;
-            closeTop.textColor = new Color32(118, 123, 123, 255);
-            closeTop.focusedTextColor = new Color32(118, 123, 123, 255);
-            closeTop.hoveredTextColor = new Color32(140, 142, 142, 255);
-            closeTop.pressedTextColor = new Color32(99, 102, 102, 102);
-            closeTop.textPadding = new RectOffset(8, 8, 8, 8);
-            closeTop.canFocus = false;
-            closeTop.playAudioEvents = true;
-            closeTop.relativePosition = new Vector3(width - closeTop.width, 0);
+            closeBtn = AddUIComponent<UIButton>();
+            closeBtn.size = new Vector2(30f, 30f);
+            closeBtn.text = "X";
+            closeBtn.textScale = 0.9f;
+            closeBtn.textColor = new Color32(118, 123, 123, 255);
+            closeBtn.focusedTextColor = new Color32(118, 123, 123, 255);
+            closeBtn.hoveredTextColor = new Color32(140, 142, 142, 255);
+            closeBtn.pressedTextColor = new Color32(99, 102, 102, 102);
+            closeBtn.textPadding = new RectOffset(8, 8, 8, 8);
+            closeBtn.canFocus = false;
+            closeBtn.playAudioEvents = true;
+            closeBtn.relativePosition = new Vector3(width - closeBtn.width, 0);
 
             title = AddUIComponent<UILabel>();
             title.textScale = 0.9f;
@@ -51,18 +53,25 @@ namespace QCommonLib.UI
             blurb.wordWrap = true;
             blurb.backgroundSprite = "UnlockingPanel";
             blurb.color = new Color32(206, 206, 206, 255);
-            blurb.size = new Vector2(width - 10, 214);
+            blurb.size = new Vector2(width - 10, height - 34 - (IncludeBottomButtonGap ? 42 : 0));
             blurb.relativePosition = new Vector2(5, 28);
             blurb.padding = new RectOffset(6, 6, 8, 8);
             blurb.atlas = atlas;
             blurb.SendToBack();
 
-            closeTop.eventClicked += (c, p) =>
+            closeBtn.eventClicked += (c, p) =>
             {
                 Close();
             };
 
             BringToFront();
+        }
+
+        public void SetSize(Vector2 newSize)
+        {
+            size = newSize;
+            closeBtn.relativePosition = new Vector3(width - closeBtn.width, 0);
+            blurb.size = new Vector2(width - 10, height - 34 - (IncludeBottomButtonGap ? 42 : 0));
         }
 
         public override void SetText(string titleText, string bodyText)
@@ -71,14 +80,16 @@ namespace QCommonLib.UI
             blurb.text = bodyText;
         }
 
-        internal void CloseButton()
+        internal void OKButton(string text = "OK")
         {
-            closeBottom = CreateButton(this);
-            closeBottom.text = "Close";
-            closeBottom.playAudioEvents = true;
-            closeBottom.relativePosition = new Vector3(width / 2 - closeBottom.width / 2, height - 40);
+            okBtn = CreateButton(this);
+            okBtn.text = text;
+            okBtn.playAudioEvents = true;
+            okBtn.textHorizontalAlignment = UIHorizontalAlignment.Center;
+            okBtn.relativePosition = new Vector3(width / 2 - okBtn.width / 2, height - 40);
+            okBtn.size = new Vector2(80, 30);
 
-            closeBottom.eventClicked += (c, p) =>
+            okBtn.eventClicked += (c, p) =>
             {
                 Close();
             };
