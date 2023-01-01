@@ -10,6 +10,71 @@ using System.Text;
 
 namespace QCommonLib
 {
+    public class QLoggerStatic
+    {
+        internal static readonly QLogger instance;
+
+        /// <summary>
+        /// Static wrapper for QLogger, instansiate with:
+        /// public class Log : QLoggerStatic { }
+        /// </summary>
+        static QLoggerStatic()
+        {
+            instance = new QLogger();
+        }
+
+        #region Redirect to instance
+        /// <summary>
+        /// Set whether or not to save debug messages
+        /// </summary>
+        public static bool IsDebug
+        {
+            get => instance.IsDebug;
+            set => instance.IsDebug = value;
+        }
+
+        public static void Debug(string message, string code = "")
+        {
+            instance.Debug(message, code);
+        }
+
+        public static void Debug(Exception exception, string code = "")
+        {
+            instance.Debug(exception, code);
+        }
+
+        public static void Info(string message, string code = "")
+        {
+            instance.Info(message, code);
+        }
+
+        public static void Info(Exception exception, string code = "")
+        {
+            instance.Info(exception, code);
+        }
+
+        public static void Warning(string message, string code = "")
+        {
+            instance.Warning(message, code);
+        }
+
+        public static void Warning(Exception exception, string code = "")
+        {
+            instance.Warning(exception, code);
+        }
+
+        public static void Error(string message, string code = "")
+        {
+            instance.Error(message, code);
+        }
+
+        public static void Error(Exception exception, string code = "")
+        {
+            instance.Error(exception, code);
+        }
+        #endregion
+    }
+
     public class QLogger
     {
         /// <summary>
@@ -156,47 +221,50 @@ namespace QCommonLib
         {
             try
             {
-                var ticks = Timer.ElapsedTicks;
-                string msg = "";
-                if (code != "") code += " ";
-
-                int maxLen = Enum.GetNames(typeof(LogLevel)).Select(str => str.Length).Max();
-                msg += string.Format($"{{0, -{maxLen}}}", $"[{logLevel}] ");
-
-                long secs = ticks / Stopwatch.Frequency;
-                long fraction = ticks % Stopwatch.Frequency;
-                msg += string.Format($"{secs:n0}.{fraction:D7} | {code}{message}{NL}");
-
-                if ((PreferredLocation & LogLocation.Mod) == LogLocation.Mod)
+                lock (LogFile)
                 {
-                    using (StreamWriter w = File.AppendText(LogFile))
+                    var ticks = Timer.ElapsedTicks;
+                    string msg = "";
+                    if (code != "") code += " ";
+
+                    int maxLen = Enum.GetNames(typeof(LogLevel)).Select(str => str.Length).Max();
+                    msg += string.Format($"{{0, -{maxLen}}}", $"[{logLevel}] ");
+
+                    long secs = ticks / Stopwatch.Frequency;
+                    long fraction = ticks % Stopwatch.Frequency;
+                    msg += string.Format($"{secs:n0}.{fraction:D7} | {code}{message}{NL}");
+
+                    if ((PreferredLocation & LogLocation.Mod) == LogLocation.Mod)
                     {
-                        w.Write(msg);
+                        using (StreamWriter w = File.AppendText(LogFile))
+                        {
+                            w.Write(msg);
+                        }
                     }
-                }
 
-                if (logLevel == LogLevel.Error || ((PreferredLocation & LogLocation.Game) == LogLocation.Game))
-                {
-                    msg = AssemblyName + " | " + msg;
-                    switch (logLevel)
+                    if (logLevel == LogLevel.Error || ((PreferredLocation & LogLocation.Game) == LogLocation.Game))
                     {
-                        case LogLevel.Error:
-                            UnityEngine.Debug.LogError(msg);
-                            break;
-                        default:
-                            UnityEngine.Debug.Log(msg);
-                            break;
+                        msg = AssemblyName + " | " + msg;
+                        switch (logLevel)
+                        {
+                            case LogLevel.Error:
+                                UnityEngine.Debug.LogError(msg);
+                                break;
+                            default:
+                                UnityEngine.Debug.Log(msg);
+                                break;
+                        }
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                UnityEngine.Debug.Log("QLogger failed to log!");
+                UnityEngine.Debug.Log("QLogger failed to log!\n" + e.ToStringNoTrace());
             }
         }
     }
 
-    public static class MyExtensions
+    public static class QExtensions
     {
         public static string ToStringNoTrace(this Exception e)
         {
