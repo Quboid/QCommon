@@ -1,6 +1,5 @@
 ﻿using ColossalFramework;
 using ColossalFramework.UI;
-using Epic.OnlineServices.Presence;
 using System;
 using UnityEngine;
 
@@ -31,12 +30,6 @@ namespace QCommonLib.UI
 
         public virtual void Close()
         {
-            if (!ShouldShow)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             if (GrabFocus)
             {
                 UIView.PopModal();
@@ -55,7 +48,7 @@ namespace QCommonLib.UI
             }
 
             isVisible = false;
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
 
         public abstract void SetText(string titleText, string bodyText);
