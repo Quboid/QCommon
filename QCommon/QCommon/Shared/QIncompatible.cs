@@ -92,8 +92,7 @@ namespace QCommonLib
         {
             return new List<string>
             {
-                "Harmony (redesigned)",
-                "Move It"
+                "Harmony (redesigned)"
             };
         }
     }
@@ -140,10 +139,7 @@ namespace QCommonLib
             Log = log;
 
             Log.Debug("IncompatibleModsPanel initialize", "[Q03]");
-            if (mainPanel != null)
-            {
-                mainPanel.OnDestroy();
-            }
+            mainPanel?.OnDestroy();
 
             modListChanged = false;
             isVisible = true;
@@ -152,9 +148,9 @@ namespace QCommonLib
             mainPanel.backgroundSprite = "UnlockingPanel2";
             mainPanel.color = new Color32(75, 75, 135, 255);
             width = 600;
-            height = 440;
+            height = 350;
             mainPanel.width = 600;
-            mainPanel.height = 440;
+            mainPanel.height = 350;
 
             Vector2 resolution = UIView.GetAView().GetScreenResolution();
             relativePosition = new Vector3((resolution.x / 2) - 300, resolution.y / 3);
@@ -182,7 +178,7 @@ namespace QCommonLib
 
             UIPanel panel = mainPanel.AddUIComponent<UIPanel>();
             panel.relativePosition = new Vector2(20, 70);
-            panel.size = new Vector2(565, 320);
+            panel.size = new Vector2(565, 270);
 
             //UIHelper helper = new UIHelper(mainPanel);
             //string checkboxLabel = Translation.ModConflicts.Get("Checkbox:Scan for known incompatible mods on startup");
@@ -194,7 +190,7 @@ namespace QCommonLib
 
             UIScrollablePanel scrollablePanel = panel.AddUIComponent<UIScrollablePanel>();
             scrollablePanel.backgroundSprite = string.Empty;
-            scrollablePanel.size = new Vector2(550, 340);
+            scrollablePanel.size = new Vector2(550, 290);
             scrollablePanel.relativePosition = new Vector3(0, 0);
             scrollablePanel.clipChildren = true;
             scrollablePanel.autoLayoutStart = LayoutStart.TopLeft;
@@ -216,7 +212,7 @@ namespace QCommonLib
             verticalScroll.stepSize = 1;
             verticalScroll.relativePosition = new Vector2(panel.width - 15, 0);
             verticalScroll.orientation = UIOrientation.Vertical;
-            verticalScroll.size = new Vector2(20, 320);
+            verticalScroll.size = new Vector2(20, 270);
             verticalScroll.incrementAmount = 25;
             verticalScroll.scrollEasingType = EasingType.BackEaseOut;
 
@@ -225,7 +221,7 @@ namespace QCommonLib
             UISlicedSprite track = verticalScroll.AddUIComponent<UISlicedSprite>();
             track.spriteName = "ScrollbarTrack";
             track.relativePosition = Vector3.zero;
-            track.size = new Vector2(16, 320);
+            track.size = new Vector2(16, 270);
 
             verticalScroll.trackObject = track;
 
@@ -325,7 +321,7 @@ namespace QCommonLib
         {
             ExceptionPanel exceptionPanel = UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel");
             exceptionPanel.SetMessage(
-                title: "TM:PE Game restart required",
+                title: "Game restart required",
                 message: "List of mods changed (deleted or unsubscribed).\n" +
                          "Please restart the game to complete operation",
                 error: false);
@@ -340,7 +336,7 @@ namespace QCommonLib
         /// <param name="plugin">The <see cref="PluginInfo"/> instance of the incompatible mod.</param>
         private void CreateEntry(ref UIScrollablePanel parent, IncompatibleMod mod, PluginInfo plugin)
         {
-            string caption = plugin.publishedFileID.AsUInt64 == LOCAL_MOD ? "Button:Delete mod" : "Button:Unsubscribe mod";
+            string caption = plugin.publishedFileID.AsUInt64 == LOCAL_MOD ? "Delete mod" : "Unsubscribe mod";
 
             UIPanel panel = parent.AddUIComponent<UIPanel>();
             panel.size = new Vector2(560, 50);
@@ -351,11 +347,7 @@ namespace QCommonLib
             label.textAlignment = UIHorizontalAlignment.Left;
             label.relativePosition = new Vector2(10, 15);
 
-            CreateButton(
-                panel,
-                caption,
-                (int)panel.width - 170,
-                10,
+            CreateButton(panel, caption, (int)panel.width - 170, 10,
                 (component, param) => UnsubscribeClick(component, param, plugin));
         }
 
@@ -368,9 +360,7 @@ namespace QCommonLib
         /// <param name="component">A handle to the UI button that was clicked.</param>
         /// <param name="eventparam">Details of the click event.</param>
         /// <param name="mod">The <see cref="PluginInfo"/> instance of the mod to remove.</param>
-        private void UnsubscribeClick(UIComponent component,
-                                      UIMouseEventParameter eventparam,
-                                      PluginInfo mod)
+        private void UnsubscribeClick(UIComponent component, UIMouseEventParameter eventparam, PluginInfo mod)
         {
             eventparam.Use();
             bool success;
@@ -379,9 +369,7 @@ namespace QCommonLib
             component.isEnabled = false;
             Log.Info($"Removing incompatible mod '{mod.name}' from {mod.modPath}");
 
-            success = mod.publishedFileID.AsUInt64 == LOCAL_MOD
-                          ? DeleteLocalMod(mod)
-                          : PlatformService.workshop.Unsubscribe(mod.publishedFileID);
+            success = mod.publishedFileID.AsUInt64 == LOCAL_MOD ? DeleteLocalMod(mod) : PlatformService.workshop.Unsubscribe(mod.publishedFileID);
 
             if (success)
             {
@@ -446,11 +434,7 @@ namespace QCommonLib
         /// <param name="y">The y position of the top-left corner of the button, relative to
         ///     <paramref name="parent"/>.</param>
         /// <param name="eventClick">The event handler for when the button is clicked.</param>
-        private void CreateButton(UIComponent parent,
-                                  string text,
-                                  int x,
-                                  int y,
-                                  MouseEventHandler eventClick)
+        private void CreateButton(UIComponent parent, string text, int x, int y, MouseEventHandler eventClick)
         {
             var button = parent.AddUIComponent<UIButton>();
             button.textScale = 0.8f;
