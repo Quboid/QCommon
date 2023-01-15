@@ -5,8 +5,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Xml.Linq;
+
+//
+// LocalizeManager and ResxReader by MacSergey 
+// https://github.com/MacSergey/ModsCommon/blob/master/LocalizeShared/LocalizeManager/Manager.cs
+// https://github.com/MacSergey/ModsCommon/tree/master/LocalizeShared/VSIXLocalizeGenerator
+//
 
 namespace QCommonLib.Lang
 {
@@ -62,7 +66,7 @@ namespace QCommonLib.Lang
 
             if (!Languages.ContainsKey(culture.Name))
             {
-                var file = Path.Combine(AssemblyPatch, "Localization");
+                var file = Path.Combine(AssemblyPatch, "Lang");
                 if (string.IsNullOrEmpty(culture.Name))
                     file = Path.Combine(file, $"{Name}.resx");
                 else
