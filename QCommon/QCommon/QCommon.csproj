@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Shared\Lang\ResxReader.cs" />
     <Compile Include="Shared\QCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\QKeybinding.cs" />
@@ -72,7 +73,11 @@
     <Compile Include="Shared\QTimer.cs" />
     <Compile Include="Shared\QVersion.cs" />
     <Compile Include="Harmony\QPatcher.cs" />
+    <Compile Include="Shared\UI\QPopup.cs" />
+    <Compile Include="Shared\UI\QPopupWindow.cs" />
     <Compile Include="Shared\UI\QToast.cs" />
+    <Compile Include="Shared\Lang\Manager.cs" />
+    <Compile Include="Shared\UI\ToastFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Harmony\packages.config" />

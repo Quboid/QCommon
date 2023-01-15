@@ -9,6 +9,8 @@
     <Import_RootNamespace>QCommon</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lang\Manager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lang\ResxReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QCommon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QIncompatible.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QKeybinding.cs" />
