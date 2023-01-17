@@ -93,8 +93,7 @@ namespace QCommonLib
         {
             return new List<string>
             {
-                "Harmony (redesigned)",
-                "Move It"
+                "Harmony (redesigned)"
             };
         }
     }
