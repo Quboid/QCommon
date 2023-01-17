@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QCommon_cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annulla</value>
   </data>
   <data name="QCommon_no" xml:space="preserve">
     <value>No</value>
@@ -127,25 +127,25 @@
     <value>OK</value>
   </data>
   <data name="QCommon_PressAnyKey" xml:space="preserve">
-    <value>Press Any Key</value>
+    <value>Premi un tasto qualsiasi</value>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Sì</value>
   </data>
   <data name="QIncompatible_DeleteMod" xml:space="preserve">
-    <value>Delete Mod</value>
+    <value>Elimina Mod</value>
   </data>
   <data name="QIncompatible_RestartBlurb" xml:space="preserve">
-    <value>List of mods changed (deleted or unsubscribed).
-Please restart the game to complete operation</value>
+    <value>Elenco mod modificate (cancellate o disiscritte).
+Riavvia il gioco per completare l'operazione</value>
   </data>
   <data name="QIncompatible_RestartTitle" xml:space="preserve">
-    <value>Game Restart Required</value>
+    <value>Riavvio Gioco Necessario</value>
   </data>
   <data name="QIncompatible_Title" xml:space="preserve">
-    <value>Incompatible Mods Check</value>
+    <value>Controllo Mod Incompatibili</value>
   </data>
   <data name="QIncompatible_UnsubMod" xml:space="preserve">
-    <value>Unsubscribe Mod</value>
+    <value>Mod Disiscritte</value>
   </data>
 </root>
