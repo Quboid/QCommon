@@ -11,19 +11,20 @@ using UnityEngine;
 using ColossalFramework.IO;
 using ColossalFramework.PlatformServices;
 using System.Reflection;
-using UnityEngine.Networking;
+using QCommonLib.Lang;
 
 namespace QCommonLib
 {
     public class QIncompatible
     {
+        private readonly string m_callerName;
+        private readonly QLogger Log;
+        private readonly Dictionary<ulong, string> m_incompatibleMods;
+        private readonly List<string> m_globalIncompatibleMods;
 
-        private QLogger Log;
-        private Dictionary<ulong, string> m_incompatibleMods;
-        private List<string> m_globalIncompatibleMods;
-
-        public QIncompatible(Dictionary<ulong, string> incompatible, QLogger Log)
+        public QIncompatible(Dictionary<ulong, string> incompatible, QLogger Log, string caller)
         {
+            m_callerName = caller;
             this.Log = Log;
             m_incompatibleMods = incompatible;
             m_globalIncompatibleMods = GetGlobalIncompatibleMods();
@@ -33,7 +34,7 @@ namespace QCommonLib
             if (found.Count > 0)
             {
                 IncompatibleModsPanel panel = UIView.GetAView().AddUIComponent(typeof(IncompatibleModsPanel)) as IncompatibleModsPanel;
-                panel.Initialize(found, Log);
+                panel.Initialize(found, Log, m_callerName);
                 UIView.PushModal(panel);
                 UIView.SetFocus(panel);
             }
@@ -92,7 +93,8 @@ namespace QCommonLib
         {
             return new List<string>
             {
-                "Harmony (redesigned)"
+                "Harmony (redesigned)",
+                "Move It"
             };
         }
     }
@@ -133,7 +135,7 @@ namespace QCommonLib
         /// Initialises the dialog, populates it with list of incompatible mods, and adds it to the modal stack.
         /// If the modal stack was previously empty, a blur effect is added over the screen background.
         /// </summary>
-        public void Initialize(Dictionary<PluginInfo, IncompatibleMod> incompatibleMods, QLogger log)
+        public void Initialize(Dictionary<PluginInfo, IncompatibleMod> incompatibleMods, QLogger log, string callerName)
         {
             IncompatibleMods = incompatibleMods;
             Log = log;
@@ -167,7 +169,7 @@ namespace QCommonLib
             title.padding = new RectOffset(10, 10, 15, 15);
             title.relativePosition = new Vector2(60, 12);
 
-            title.text = "QCommon Incompatible Mods Check";
+            title.text = callerName + " - " + QStr.QIncompatible_Title;
 
             closeBtn = mainPanel.AddUIComponent<UIButton>();
             closeBtn.eventClick += CloseButtonClick;
@@ -321,9 +323,8 @@ namespace QCommonLib
         {
             ExceptionPanel exceptionPanel = UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel");
             exceptionPanel.SetMessage(
-                title: "Game restart required",
-                message: "List of mods changed (deleted or unsubscribed).\n" +
-                         "Please restart the game to complete operation",
+                title: QStr.QIncompatible_RestartTitle,
+                message: QStr.QIncompatible_RestartBlurb,
                 error: false);
         }
 
@@ -336,7 +337,7 @@ namespace QCommonLib
         /// <param name="plugin">The <see cref="PluginInfo"/> instance of the incompatible mod.</param>
         private void CreateEntry(ref UIScrollablePanel parent, IncompatibleMod mod, PluginInfo plugin)
         {
-            string caption = plugin.publishedFileID.AsUInt64 == LOCAL_MOD ? "Delete mod" : "Unsubscribe mod";
+            string caption = plugin.publishedFileID.AsUInt64 == LOCAL_MOD ? QStr.QIncompatible_DeleteMod : QStr.QIncompatible_UnsubMod;
 
             UIPanel panel = parent.AddUIComponent<UIPanel>();
             panel.size = new Vector2(560, 50);

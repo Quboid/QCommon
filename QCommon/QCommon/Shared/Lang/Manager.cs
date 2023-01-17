@@ -1,4 +1,5 @@
 ﻿using ColossalFramework.Plugins;
+using NetworkAnarchy;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,12 +18,15 @@ namespace QCommonLib.Lang
     public class LocalizeManager
     {
         private string Name { get; }
-        private string AssemblyPatch { get; } = string.Empty;
+        private string SubDirectory { get; }
+        private string AssemblyPath { get; } = string.Empty;
         private Dictionary<string, LocalizeSet> Languages { get; } = new Dictionary<string, LocalizeSet>();
 
-        public LocalizeManager(string name, Assembly assembly)
+        public LocalizeManager(string name, Assembly assembly, string subDirectory = "")
         {
             Name = name;
+            SubDirectory = subDirectory;
+            Log.Debug($"AAA02 {Name} ({SubDirectory})");
 
             foreach (PluginManager.PluginInfo plugin in PluginManager.instance.GetPluginsInfo())
             {
@@ -31,7 +35,10 @@ namespace QCommonLib.Lang
                     foreach (Assembly pluginAssembly in plugin.GetAssemblies())
                     {
                         if (pluginAssembly == assembly)
-                            AssemblyPatch = plugin.modPath;
+                        {
+                            AssemblyPath = plugin.modPath;
+                            break;
+                        }
                     }
                 }
                 catch (Exception) { }
@@ -66,7 +73,7 @@ namespace QCommonLib.Lang
 
             if (!Languages.ContainsKey(culture.Name))
             {
-                var file = Path.Combine(AssemblyPatch, "Lang");
+                var file = GetLocaleFolder();
                 if (string.IsNullOrEmpty(culture.Name))
                     file = Path.Combine(file, $"{Name}.resx");
                 else
@@ -79,9 +86,9 @@ namespace QCommonLib.Lang
 
         public IEnumerable<string> GetSupportLocales()
         {
-            if(!string.IsNullOrEmpty(AssemblyPatch))
+            if(!string.IsNullOrEmpty(AssemblyPath))
             {
-                var localeFolder = Path.Combine(AssemblyPatch, "Localize");
+                var localeFolder = GetLocaleFolder();
                 if(Directory.Exists(localeFolder))
                 {
                     foreach(var file in Directory.GetFiles(localeFolder, $"{Name}.*.resx"))
@@ -91,6 +98,13 @@ namespace QCommonLib.Lang
                     }
                 }
             }
+        }
+
+        private string GetLocaleFolder()
+        {
+            string localeFolder = Path.Combine(AssemblyPath, "Lang");
+            if (SubDirectory != null && SubDirectory.Length > 0) localeFolder = Path.Combine(localeFolder, SubDirectory);
+            return localeFolder;
         }
     }
 

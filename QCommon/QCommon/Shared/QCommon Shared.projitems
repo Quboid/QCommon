@@ -9,6 +9,7 @@
     <Import_RootNamespace>QCommon</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lang\Common\QStr.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lang\Manager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lang\ResxReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QCommon.cs" />
@@ -25,6 +26,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\ToastFrame.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Lang\Common\QStr.resx">
+      <Generator>QLocalizeGenerator</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\Bottom.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\BottomLeft.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)UI\Toast\Left.png" />

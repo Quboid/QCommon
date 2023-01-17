@@ -1,6 +1,7 @@
 ﻿using ColossalFramework;
 using ColossalFramework.Globalization;
 using ColossalFramework.UI;
+using QCommonLib.Lang;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace QCommonLib
         private SavedInputKey m_EditingBinding;
         private string m_EditingBindingCategory;
 
-        protected string PressAnyKeyStr;
+        protected string PressAnyKeyStr = QStr.QCommon_PressAnyKey;
         protected Dictionary<string, SavedInputKey> Keybindings;
 
         private int count = 0;
