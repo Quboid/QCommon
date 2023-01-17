@@ -118,34 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QCommon_cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>취소</value>
   </data>
   <data name="QCommon_no" xml:space="preserve">
-    <value>No</value>
+    <value>아니오</value>
   </data>
   <data name="QCommon_ok" xml:space="preserve">
-    <value>OK</value>
+    <value>확인</value>
   </data>
   <data name="QCommon_PressAnyKey" xml:space="preserve">
-    <value>Press Any Key</value>
+    <value>아무 키나 누르세요</value>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>예</value>
   </data>
   <data name="QIncompatible_DeleteMod" xml:space="preserve">
-    <value>Delete Mod</value>
+    <value>모드 삭제</value>
   </data>
   <data name="QIncompatible_RestartBlurb" xml:space="preserve">
-    <value>List of mods changed (deleted or unsubscribed).
-Please restart the game to complete operation</value>
+    <value>모드 목록이 변경되었습니다 (삭제되었거나 구독 취소).
+작업을 완료하기 위해 게임을 다시 시작해 주세요</value>
   </data>
   <data name="QIncompatible_RestartTitle" xml:space="preserve">
-    <value>Game Restart Required</value>
+    <value>게임 재시작 필요</value>
   </data>
   <data name="QIncompatible_Title" xml:space="preserve">
-    <value>Incompatible Mods Check</value>
+    <value>비호환 모드 확인</value>
   </data>
   <data name="QIncompatible_UnsubMod" xml:space="preserve">
-    <value>Unsubscribe Mod</value>
+    <value>모드 구독취소</value>
   </data>
 </root>
