@@ -118,34 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QCommon_cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="QCommon_no" xml:space="preserve">
-    <value>No</value>
+    <value>否</value>
   </data>
   <data name="QCommon_ok" xml:space="preserve">
-    <value>OK</value>
+    <value>确定</value>
   </data>
   <data name="QCommon_PressAnyKey" xml:space="preserve">
-    <value>Press Any Key</value>
+    <value>按任意键</value>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>是</value>
   </data>
   <data name="QIncompatible_DeleteMod" xml:space="preserve">
-    <value>Delete Mod</value>
+    <value>删除模组</value>
   </data>
   <data name="QIncompatible_RestartBlurb" xml:space="preserve">
-    <value>List of mods changed (deleted or unsubscribed).
-Please restart the game to complete operation</value>
+    <value>模组列表已更改(已删除或取消订阅)。
+请重启游戏以完成操作</value>
   </data>
   <data name="QIncompatible_RestartTitle" xml:space="preserve">
-    <value>Game Restart Required</value>
+    <value>游戏需要重启</value>
   </data>
   <data name="QIncompatible_Title" xml:space="preserve">
-    <value>Incompatible Mods Check</value>
+    <value>检查不兼容模组</value>
   </data>
   <data name="QIncompatible_UnsubMod" xml:space="preserve">
-    <value>Unsubscribe Mod</value>
+    <value>取消订阅模组</value>
   </data>
 </root>
