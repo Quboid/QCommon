@@ -118,34 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QCommon_cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>キャンセル</value>
   </data>
   <data name="QCommon_no" xml:space="preserve">
-    <value>No</value>
+    <value>いいえ</value>
   </data>
   <data name="QCommon_ok" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="QCommon_PressAnyKey" xml:space="preserve">
-    <value>Press Any Key</value>
+    <value>何かキーを押してください</value>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>はい</value>
   </data>
   <data name="QIncompatible_DeleteMod" xml:space="preserve">
-    <value>Delete Mod</value>
+    <value>MODを削除</value>
   </data>
   <data name="QIncompatible_RestartBlurb" xml:space="preserve">
-    <value>List of mods changed (deleted or unsubscribed).
-Please restart the game to complete operation</value>
+    <value>MODの一覧が変更されました (MODの削除やサブスクの解除)
+操作を完了するには、ゲームを再起動して下さい</value>
   </data>
   <data name="QIncompatible_RestartTitle" xml:space="preserve">
-    <value>Game Restart Required</value>
+    <value>ゲームの再起動が必要</value>
   </data>
   <data name="QIncompatible_Title" xml:space="preserve">
-    <value>Incompatible Mods Check</value>
+    <value>非互換MODを確認</value>
   </data>
   <data name="QIncompatible_UnsubMod" xml:space="preserve">
-    <value>Unsubscribe Mod</value>
+    <value>MODのサブスクを解除</value>
   </data>
 </root>
