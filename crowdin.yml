@@ -1,0 +1,3 @@
+files:
+  - source: /QCommon/QCommon/Shared/Lang/Common/QStr.resx
+    translation: /QCommon/QCommon/Shared/Lang/Common/QStr.%two_letters_code%.resx
