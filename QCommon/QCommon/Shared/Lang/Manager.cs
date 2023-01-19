@@ -1,5 +1,4 @@
 ﻿using ColossalFramework.Plugins;
-using NetworkAnarchy;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,7 +25,6 @@ namespace QCommonLib.Lang
         {
             Name = name;
             SubDirectory = subDirectory;
-            Log.Debug($"AAA02 {Name} ({SubDirectory})");
 
             foreach (PluginManager.PluginInfo plugin in PluginManager.instance.GetPluginsInfo())
             {

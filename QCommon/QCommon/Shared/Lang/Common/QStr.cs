@@ -26,6 +26,11 @@ namespace QCommonLib.Lang
 		public static string QCommon_PressAnyKey => LocaleManager.GetString("QCommon_PressAnyKey", Culture);
 
 		/// <summary>
+		/// English
+		/// </summary>
+		public static string QCommon_ThisLanguage => LocaleManager.GetString("QCommon_ThisLanguage", Culture);
+
+		/// <summary>
 		/// Yes
 		/// </summary>
 		public static string QCommon_yes => LocaleManager.GetString("QCommon_yes", Culture);
