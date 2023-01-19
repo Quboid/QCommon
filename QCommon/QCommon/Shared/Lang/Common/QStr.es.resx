@@ -127,29 +127,29 @@
     <value>Aceptar</value>
   </data>
   <data name="QCommon_PressAnyKey" xml:space="preserve">
-    <value>Press Any Key</value>
+    <value>Pulsa cualquier tecla</value>
   </data>
   <data name="QCommon_ThisLanguage" xml:space="preserve">
-    <value>English</value>
+    <value>Español</value>
     <comment>The name of the language you are translating to</comment>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Sí</value>
   </data>
   <data name="QIncompatible_DeleteMod" xml:space="preserve">
-    <value>Delete Mod</value>
+    <value>Eliminar Mod</value>
   </data>
   <data name="QIncompatible_RestartBlurb" xml:space="preserve">
-    <value>List of mods changed (deleted or unsubscribed).
-Please restart the game to complete operation</value>
+    <value>Lista de mods cambiados (eliminados o desubscritos).
+Por favor, reinicia el juego para completar la operación</value>
   </data>
   <data name="QIncompatible_RestartTitle" xml:space="preserve">
-    <value>Game Restart Required</value>
+    <value>Reinicio necesario</value>
   </data>
   <data name="QIncompatible_Title" xml:space="preserve">
-    <value>Incompatible Mods Check</value>
+    <value>Comprobación de mods incompatibles</value>
   </data>
   <data name="QIncompatible_UnsubMod" xml:space="preserve">
-    <value>Unsubscribe Mod</value>
+    <value>Desubscribirse del mod</value>
   </data>
 </root>
