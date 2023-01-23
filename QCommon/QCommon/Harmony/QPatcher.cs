@@ -41,6 +41,7 @@ namespace QCommonLib
             IsDebug = isDebug;
             EarlyRevert = earlyRevert;
             earlyDeploy?.Invoke(this);
+            QLoggerStatic.Debug($"QPatcher initialised, EarlyDeploy applied", "[Q04]");
         }
 
         public delegate void DEarlyDeploy(QPatcher patcher);
@@ -55,6 +56,7 @@ namespace QCommonLib
 
             patched = true;
             HarmonyHelper.DoOnHarmonyReady(() => Instance.PatchAll(caller));
+            QLoggerStatic.Debug($"QPatcher PatchAll applied", "[Q05]");
         }
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace QCommonLib
             EarlyRevert?.Invoke(this);
             HarmonyHelper.DoOnHarmonyReady(() => Instance.UnpatchAll(HarmonyId));
             patched = false;
+            QLoggerStatic.Debug($"QPatcher EarlyRevert and UnpatchAll applied", "[Q06]");
         }
 
         /// <summary>

@@ -35,42 +35,42 @@ namespace QCommonLib
 
         public static void Debug(string message, string code = "")
         {
-            instance.Debug(message, code);
+            instance?.Debug(message, code);
         }
 
         public static void Debug(Exception exception, string code = "")
         {
-            instance.Debug(exception, code);
+            instance?.Debug(exception, code);
         }
 
         public static void Info(string message, string code = "")
         {
-            instance.Info(message, code);
+            instance?.Info(message, code);
         }
 
         public static void Info(Exception exception, string code = "")
         {
-            instance.Info(exception, code);
+            instance?.Info(exception, code);
         }
 
         public static void Warning(string message, string code = "")
         {
-            instance.Warning(message, code);
+            instance?.Warning(message, code);
         }
 
         public static void Warning(Exception exception, string code = "")
         {
-            instance.Warning(exception, code);
+            instance?.Warning(exception, code);
         }
 
         public static void Error(string message, string code = "")
         {
-            instance.Error(message, code);
+            instance?.Error(message, code);
         }
 
         public static void Error(Exception exception, string code = "")
         {
-            instance.Error(exception, code);
+            instance?.Error(exception, code);
         }
         #endregion
     }

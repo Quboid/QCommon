@@ -8,6 +8,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Error code: 06
+
 namespace QCommonLib
 {
     public class QCommon
@@ -60,7 +62,7 @@ namespace QCommonLib
         /// <param name="assName">The assembly name (lowercase)</param>
         /// <param name="assNameExcept">An assembly name exception to skip even if matches previous parameter</param>
         /// <param name="onlyEnabled">Limit result to enabled mods?</param>
-        /// <returns>Game mod's assembly</returns>
+        /// <returns>Whether or not the mod exists</returns>
         public static bool CheckAssembly(string modName, string assName, string assNameExcept = "", bool onlyEnabled = true)
         {
             return GetAssembly(modName, assName, assNameExcept, onlyEnabled) != null;
