@@ -130,7 +130,7 @@
     <value>Beliebige Taste drücken</value>
   </data>
   <data name="QCommon_ThisLanguage" xml:space="preserve">
-    <value>English</value>
+    <value>Deutsch</value>
     <comment>The name of the language you are translating to</comment>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
