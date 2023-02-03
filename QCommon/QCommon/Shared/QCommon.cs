@@ -48,7 +48,7 @@ namespace QCommonLib
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e);
+                    QLoggerStatic.Error(e, "[Q07]");
                 } // If the plugin fails to process, move on to next plugin
             }
 
