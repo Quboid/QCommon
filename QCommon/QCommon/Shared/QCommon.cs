@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -83,6 +84,17 @@ namespace QCommonLib
                 }
             }
             UnityEngine.Debug.Log(msg);
+        }
+
+        /// <summary>
+        /// Get the name of the thread currently being executed on
+        /// </summary>
+        /// <returns>Thread name</returns>
+        public static string GetThreadName()
+        {
+            if (Thread.CurrentThread == Singleton<SimulationManager>.instance.m_simulationThread)
+                return "Simulation";
+            return "Main";
         }
 
         /// <summary>

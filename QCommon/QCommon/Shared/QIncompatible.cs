@@ -82,7 +82,7 @@ namespace QCommonLib
         private string GetPluginName(PluginInfo plugin)
         {
             // String.IsNullOrEmpty(plugin.name) ? "(name unknown)" : plugin.name;
-            return ((IUserMod)plugin.userModInstance).Name;
+            return ((IUserMod)plugin.userModInstance).Name ?? "";
         }
 
         /// <summary>
