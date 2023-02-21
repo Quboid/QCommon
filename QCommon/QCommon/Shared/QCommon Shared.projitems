@@ -20,6 +20,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)QTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tasks\Batch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tasks\Task.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tasks\TaskManagement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\QPopup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\QPopupWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\QToast.cs" />

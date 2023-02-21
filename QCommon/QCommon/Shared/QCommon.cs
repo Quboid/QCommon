@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // Error code: 06
