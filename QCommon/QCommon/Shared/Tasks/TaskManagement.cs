@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ColossalFramework.Threading;
+using System.Collections.Generic;
 
 namespace QCommonLib.QTasks
 {
@@ -20,6 +21,13 @@ namespace QCommonLib.QTasks
         internal void Update()
         {
             if (Batches == null || Batches.Count == 0) return; // No tasks exist
+
+            //string msg = $"BBB02 TM Update ({Batches.Count})";
+            //if (Current != null)
+            //{
+            //    msg += $" - {Current.Name}:{Current.Status} ({Current.Size})";
+            //}
+            //Log.Debug(msg);
 
             // Check if current batch is complete
             if (Current != null)
@@ -53,8 +61,10 @@ namespace QCommonLib.QTasks
         /// <param name="batch">The batch to add to the end of the queue</param>
         internal void EnqueueBatch(QBatch batch)
         {
-            if (Batches == null) Batches = new Queue<QBatch>();
+            //Log.Debug($"BBB01 {batch.Name}:{batch.Size} (ignore:{(batch.Size == 0 && batch.Prefix == null && batch.Postfix == null)})");
+            if (batch.Size == 0 && batch.Prefix == null && batch.Postfix == null) return;
 
+            if (Batches == null) Batches = new Queue<QBatch>();
             Batches.Enqueue(batch);
         }
 

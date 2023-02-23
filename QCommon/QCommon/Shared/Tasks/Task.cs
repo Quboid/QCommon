@@ -38,6 +38,12 @@ namespace QCommonLib.QTasks
             Log = log;
         }
 
+        private static object lockSim = new object(), lockMain = new object();
+
+        /// <summary>
+        /// Execute the task, then run Finish method
+        /// </summary>
+        /// <returns>Did the task run successfully?</returns>
         internal bool Execute()
         {
             try
@@ -51,8 +57,11 @@ namespace QCommonLib.QTasks
                         {
                             try
                             {
-                                CodeBlock();
-                                this.Finish();
+                                lock (lockSim)
+                                {
+                                    CodeBlock();
+                                    this.Finish();
+                                }
                             }
                             catch (Exception e)
                             {
@@ -66,8 +75,11 @@ namespace QCommonLib.QTasks
                         {
                             try
                             {
-                                CodeBlock();
-                                this.Finish();
+                                lock (lockMain)
+                                {
+                                    CodeBlock();
+                                    this.Finish();
+                                }
                             }
                             catch (Exception e)
                             {

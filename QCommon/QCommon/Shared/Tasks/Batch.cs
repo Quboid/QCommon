@@ -35,8 +35,6 @@ namespace QCommonLib.QTasks
         {
             try
             {
-                Log.Debug($"AAA01 [{Name}] Tasks:{Tasks.Count}, Status:{Status}");
-
                 switch (Status)
                 {
                     case Statuses.Start:
@@ -56,7 +54,7 @@ namespace QCommonLib.QTasks
                         break;
 
                     case Statuses.Waiting:
-                        if (Tasks.Count > 0)
+                        if (Size > 0)
                         {
                             foreach (QTask t in Tasks)
                             {
