@@ -8,26 +8,27 @@ namespace QCommonLib.QTasks
 {
     internal class QTask
     {
+        private const int MAX_LIFE = 10; // Task can last up to 10 seconds
+        private QTimer Timer { get; set; } = null;
+
         private readonly QLogger Log;
 
         /// <summary>
         /// The thread to execute the codeblock on
         /// </summary>
-        internal Threads Thread { get => _thread; set => _thread = value; }
-        private Threads _thread;
+        internal Threads Thread { get; set; }
 
         /// <summary>
         /// The task's status
         /// </summary>
-        internal Statuses Status { get => _status; set => _status = value; }
-        private Statuses _status;
+        internal Statuses Status { get; set; }
 
         /// <summary>
         /// The code to execute in Thread
         /// </summary>
-        internal DCodeBlock CodeBlock { get => _codeBlock; set => _codeBlock = value; }
-        private DCodeBlock _codeBlock;
-        internal delegate void DCodeBlock();
+        /// <returns>Has the code completed?</returns>
+        internal DCodeBlock CodeBlock { get; set; }
+        internal delegate bool DCodeBlock();
 
         //internal Task(Action action, Threads thread, DCodeBlock codeBlock)
         internal QTask(Threads thread, DCodeBlock codeBlock, QLogger log)
@@ -38,7 +39,8 @@ namespace QCommonLib.QTasks
             Log = log;
         }
 
-        private static object lockSim = new object(), lockMain = new object();
+        private static readonly object lockSim = new object();
+        private static readonly object lockMain = new object();
 
         /// <summary>
         /// Execute the task, then run Finish method
@@ -46,6 +48,17 @@ namespace QCommonLib.QTasks
         /// <returns>Did the task run successfully?</returns>
         internal bool Execute()
         {
+            if (Timer == null)
+            {
+                Timer = new QTimer();
+            }
+            else if (Timer.Seconds > MAX_LIFE)
+            {
+                Log.Warning($"Task reached EOL, terminating.", "[Q07]");
+                Status = Statuses.Finished;
+                return true;
+            }
+
             try
             {
                 Status = Statuses.Processing;
@@ -59,8 +72,8 @@ namespace QCommonLib.QTasks
                             {
                                 lock (lockSim)
                                 {
-                                    CodeBlock();
-                                    this.Finish();
+                                    if (CodeBlock()) Finish();
+                                    else Status = Statuses.Waiting;
                                 }
                             }
                             catch (Exception e)
@@ -77,8 +90,8 @@ namespace QCommonLib.QTasks
                             {
                                 lock (lockMain)
                                 {
-                                    CodeBlock();
-                                    this.Finish();
+                                    if (CodeBlock()) Finish();
+                                    else Status = Statuses.Waiting;
                                 }
                             }
                             catch (Exception e)
@@ -111,9 +124,21 @@ namespace QCommonLib.QTasks
 
         internal enum Statuses
         {
+            /// <summary>
+            /// Something has gone wrong
+            /// </summary>
             None,
+            /// <summary>
+            /// Task is ready to (re)start
+            /// </summary>
             Waiting,
+            /// <summary>
+            /// Task is executing
+            /// </summary>
             Processing,
+            /// <summary>
+            /// Task has completed
+            /// </summary>
             Finished
         }
 

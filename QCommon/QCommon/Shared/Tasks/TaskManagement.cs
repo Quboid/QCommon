@@ -1,19 +1,39 @@
-﻿using ColossalFramework.Threading;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace QCommonLib.QTasks
 {
-    internal class QTaskManager
+    internal class QTaskManager : MonoBehaviour
     {
-        private readonly QLogger Log;
+        internal QLogger Log;
         private Queue<QBatch> Batches;
         private QBatch Current;
+
+        internal static QTaskManager Factory(QLogger log)
+        {
+            GameObject go = new GameObject("QTaskManager");
+            QTaskManager tm = go.AddComponent<QTaskManager>();
+            tm.Log = log;
+            return tm;
+        }
+
+        internal QTaskManager()
+        {
+            Batches = new Queue<QBatch>();
+        }
 
         internal QTaskManager(QLogger log)
         {
             Batches = new Queue<QBatch>();
             Log = log;
         }
+
+        ~QTaskManager()
+        {
+            GameObject.Destroy(this.gameObject);
+        }
+
+        internal bool Active => Current != null;
 
         /// <summary>
         /// Runs on each tick
@@ -22,14 +42,6 @@ namespace QCommonLib.QTasks
         {
             if (Batches == null || Batches.Count == 0) return; // No tasks exist
 
-            //string msg = $"BBB02 TM Update ({Batches.Count})";
-            //if (Current != null)
-            //{
-            //    msg += $" - {Current.Name}:{Current.Status} ({Current.Size})";
-            //}
-            //Log.Debug(msg);
-
-            // Check if current batch is complete
             if (Current != null)
             {
                 if (Current.Status == QBatch.Statuses.Finished)
@@ -45,6 +57,7 @@ namespace QCommonLib.QTasks
                 if (Batches.Count > 0)
                 { // Get next batch
                     Current = Batches.Peek();
+                    //Log.Debug($"BBB02 {Current.Name}:{Current.Size}");
                 }
                 else
                 { // Nothing to do
@@ -56,12 +69,12 @@ namespace QCommonLib.QTasks
         }
 
         /// <summary>
-        /// Add a new batch to the queue
+        /// Add a new batch to the queue, if batch has tasks and/or prefix/postfix
         /// </summary>
         /// <param name="batch">The batch to add to the end of the queue</param>
         internal void EnqueueBatch(QBatch batch)
         {
-            //Log.Debug($"BBB01 {batch.Name}:{batch.Size} (ignore:{(batch.Size == 0 && batch.Prefix == null && batch.Postfix == null)})");
+            //Log.Debug($"BBB01 Enqueuing {batch.Name}:{batch.Size} (ignore:{(batch.Size == 0 && batch.Prefix == null && batch.Postfix == null)})");
             if (batch.Size == 0 && batch.Prefix == null && batch.Postfix == null) return;
 
             if (Batches == null) Batches = new Queue<QBatch>();

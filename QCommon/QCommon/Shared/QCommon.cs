@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Threading;
 using UnityEngine.SceneManagement;
 
-// Error code: 06
+// Error code: 07
 
 namespace QCommonLib
 {

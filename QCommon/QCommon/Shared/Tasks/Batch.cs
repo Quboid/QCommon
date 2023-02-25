@@ -5,6 +5,9 @@ namespace QCommonLib.QTasks
 {
     internal class QBatch
     {
+        private const int MAX_LIFE = 20; // Batch can last up to 20 seconds
+        private QTimer Timer { get; set; } = null;
+
         private readonly QLogger Log;
 
         internal List<QTask> Tasks;
@@ -33,6 +36,21 @@ namespace QCommonLib.QTasks
 
         internal void Update()
         {
+            if (Timer == null)
+            {
+                Timer = new QTimer();
+            }
+            else if (Timer.Seconds > MAX_LIFE)
+            {
+                Log.Warning($"Batch reached EOL, terminating.", "[Q07]");
+                foreach (QTask t in Tasks)
+                {
+                    t.Status = QTask.Statuses.Finished;
+                }
+                Status = Statuses.Finished;
+                return;
+            }
+
             try
             {
                 switch (Status)
@@ -75,7 +93,11 @@ namespace QCommonLib.QTasks
                             if (t.Status != QTask.Statuses.Finished)
                             {
                                 complete = false;
-                                break;
+
+                                if (t.Status == QTask.Statuses.Waiting)
+                                { // Any task that is Waiting has executed, but due to execute again
+                                    t.Execute();
+                                }
                             }
                         }
                         if (complete) Status = Statuses.Processed;
