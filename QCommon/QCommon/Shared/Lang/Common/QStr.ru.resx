@@ -130,7 +130,7 @@
     <value>Нажмите любую клавишу</value>
   </data>
   <data name="QCommon_ThisLanguage" xml:space="preserve">
-    <value>English</value>
+    <value>Русский</value>
     <comment>The name of the language you are translating to</comment>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
