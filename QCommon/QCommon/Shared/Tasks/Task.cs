@@ -5,7 +5,7 @@ namespace QCommonLib.QTasks
 {
     internal class QTask
     {
-        private const int MAX_LIFE = 10; // Task can last up to 10 seconds
+        private const int MAX_LIFE = 20; // Task execution loop can last up to 20 seconds
         private QTimer Timer { get; set; } = null;
 
         private readonly QLogger Log;

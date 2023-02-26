@@ -5,7 +5,7 @@ namespace QCommonLib.QTasks
 {
     internal class QBatch
     {
-        private const int MAX_LIFE = 20; // Batch can last up to 20 seconds
+        private const int MAX_LIFE = 40; // Batch execution can last up to 40 seconds
         private QTimer Timer { get; set; } = null;
 
         private readonly QLogger Log;
@@ -88,10 +88,12 @@ namespace QCommonLib.QTasks
 
                     case Statuses.Processing:
                         bool complete = true;
+                        List<QTask> newTasks = new List<QTask>();
                         foreach (QTask t in Tasks)
                         {
                             if (t.Status != QTask.Statuses.Finished)
                             {
+                                newTasks.Add(t);
                                 complete = false;
 
                                 if (t.Status == QTask.Statuses.Waiting)
@@ -100,6 +102,7 @@ namespace QCommonLib.QTasks
                                 }
                             }
                         }
+                        Tasks = newTasks;
                         if (complete) Status = Statuses.Processed;
                         break;
 

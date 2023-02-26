@@ -9,34 +9,15 @@ namespace QCommonLib.QTasks
         private Queue<QBatch> Batches;
         private QBatch Current;
 
-        internal static QTaskManager Factory(QLogger log)
-        {
-            GameObject go = new GameObject("QTaskManager");
-            QTaskManager tm = go.AddComponent<QTaskManager>();
-            tm.Log = log;
-            return tm;
-        }
-
-        internal QTaskManager()
+        internal void Start()
         {
             Batches = new Queue<QBatch>();
-        }
-
-        internal QTaskManager(QLogger log)
-        {
-            Batches = new Queue<QBatch>();
-            Log = log;
-        }
-
-        ~QTaskManager()
-        {
-            GameObject.Destroy(this.gameObject);
         }
 
         internal bool Active => Current != null;
 
         /// <summary>
-        /// Runs on each tick
+        /// MonoBehaviour method that runs on each tick
         /// </summary>
         internal void Update()
         {
@@ -60,7 +41,7 @@ namespace QCommonLib.QTasks
                     //Log.Debug($"BBB02 {Current.Name}:{Current.Size}");
                 }
                 else
-                { // Nothing to do
+                { // Finished the queue
                     return;
                 }
             }
