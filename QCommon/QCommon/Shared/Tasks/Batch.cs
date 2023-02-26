@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace QCommonLib.QTasks
 {
     internal class QBatch
     {
-        private const int MAX_LIFE = 40; // Batch execution can last up to 40 seconds
+        internal const int MAX_LIFE = 300; // Batch execution maximum life ceiling
+        internal const int PER_TASK = 2; // Max time per task
+        internal const int MIN_LIFE = QTask.MAX_LIFE + 5; // Batch execution max life floor 
+        private readonly int maxLife;
         private QTimer Timer { get; set; } = null;
 
         private readonly QLogger Log;
@@ -32,6 +36,8 @@ namespace QCommonLib.QTasks
             Status = Statuses.Start;
             Name = name;
             Log = log;
+
+            maxLife = Mathf.Clamp(Size * PER_TASK, MIN_LIFE, MAX_LIFE);
         }
 
         internal void Update()
@@ -40,7 +46,7 @@ namespace QCommonLib.QTasks
             {
                 Timer = new QTimer();
             }
-            else if (Timer.Seconds > MAX_LIFE)
+            else if (Timer.Seconds > maxLife)
             {
                 Log.Warning($"Batch reached EOL, terminating.", "[Q07]");
                 foreach (QTask t in Tasks)
