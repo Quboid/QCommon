@@ -36,9 +36,6 @@ namespace QCommonLib.QTasks
             Log = log;
         }
 
-        private static readonly object lockSim = new object();
-        private static readonly object lockMain = new object();
-
         /// <summary>
         /// Execute the task, then run Finish method
         /// </summary>
@@ -67,10 +64,13 @@ namespace QCommonLib.QTasks
                         {
                             try
                             {
-                                lock (lockSim)
+                                if (CodeBlock())
                                 {
-                                    if (CodeBlock()) Finish();
-                                    else Status = Statuses.Waiting;
+                                    Singleton<SimulationManager>.instance.m_ThreadingWrapper.QueueMainThread(() => Finish());
+                                }
+                                else
+                                {
+                                    Singleton<SimulationManager>.instance.m_ThreadingWrapper.QueueMainThread(() => ReQueue());
                                 }
                             }
                             catch (Exception e)
@@ -85,11 +85,8 @@ namespace QCommonLib.QTasks
                         {
                             try
                             {
-                                lock (lockMain)
-                                {
-                                    if (CodeBlock()) Finish();
-                                    else Status = Statuses.Waiting;
-                                }
+                                if (CodeBlock()) Finish();
+                                else Status = Statuses.Waiting;
                             }
                             catch (Exception e)
                             {
@@ -112,7 +109,15 @@ namespace QCommonLib.QTasks
         }
 
         /// <summary>
-        /// Called immediately after CodeBlock has executed, on same thread
+        /// Called immediately after CodeBlock has executed, on main thread
+        /// </summary>
+        internal void ReQueue()
+        {
+            Status = Statuses.Waiting;
+        }
+
+        /// <summary>
+        /// Called immediately after CodeBlock has executed, on main thread
         /// </summary>
         internal void Finish()
         {
@@ -121,10 +126,6 @@ namespace QCommonLib.QTasks
 
         internal enum Statuses
         {
-            /// <summary>
-            /// Something has gone wrong
-            /// </summary>
-            None,
             /// <summary>
             /// Task is ready to (re)start
             /// </summary>

@@ -55,8 +55,7 @@ namespace QCommonLib.QTasks
         /// <param name="batch">The batch to add to the end of the queue</param>
         internal void EnqueueBatch(QBatch batch)
         {
-            //Log.Debug($"BBB01 Enqueuing {batch.Name}:{batch.Size} (ignore:{(batch.Size == 0 && batch.Prefix == null && batch.Postfix == null)})");
-            if (batch.Size == 0 && batch.Prefix == null && batch.Postfix == null) return;
+            if (batch.Size == 0) return;
 
             if (Batches == null) Batches = new Queue<QBatch>();
             Batches.Enqueue(batch);
@@ -69,7 +68,7 @@ namespace QCommonLib.QTasks
         /// <param name="name">Optional name for logging</param>
         internal void AddSingleTask(QTask task, string name = "")
         {
-            EnqueueBatch(CreateBatch(new List<QTask> { task }, null, null, name));
+            EnqueueBatch(CreateBatch(new List<QTask> { task }, name));
         }
 
         /// <summary>
@@ -80,32 +79,28 @@ namespace QCommonLib.QTasks
         /// <param name="name">Optional name for logging</param>
         internal void AddSingleTask(QTask.Threads thread, QTask.DCodeBlock codeBlock, string name = "")
         {
-            EnqueueBatch(CreateBatch(new List<QTask> { CreateTask(thread, codeBlock) }, null, null, name));
+            EnqueueBatch(CreateBatch(new List<QTask> { CreateTask(thread, codeBlock) }, name));
         }
 
         /// <summary>
         /// Create and queue a new batch
         /// </summary>
         /// <param name="tasks">Main task list</param>
-        /// <param name="prefix">Task to run to completion before main task list has started</param>
-        /// <param name="postfix">Task to run after main task list has finished</param>
         /// <param name="name">Optional name for logging</param>
-        internal void AddBatch(List<QTask> tasks, QTask prefix, QTask postfix, string name)
+        internal void AddBatch(List<QTask> tasks, string name)
         {
-            EnqueueBatch(CreateBatch(tasks, prefix, postfix, name));
+            EnqueueBatch(CreateBatch(tasks, name));
         }
 
         /// <summary>
         /// Create a new batch
         /// </summary>
         /// <param name="tasks">Main task list</param>
-        /// <param name="prefix">Task to run to completion before main task list has started</param>
-        /// <param name="postfix">Task to run after main task list has finished</param>
         /// <param name="name">Optional name for logging</param>
         /// <returns>QBatch instance</returns>
-        internal QBatch CreateBatch(List<QTask> tasks, QTask prefix, QTask postfix, string name)
+        internal QBatch CreateBatch(List<QTask> tasks, string name)
         {
-            return new QBatch(tasks, prefix, postfix, Log, name);
+            return new QBatch(tasks, Log, name);
         }
 
         /// <summary>
