@@ -17,6 +17,7 @@ namespace QCommonLib.QTasks
         internal List<QTask> Tasks;
         internal int Size => Tasks.Count;
         internal string Name;
+        internal Queues Queue;
 
         /// <summary>
         /// The batch's status
@@ -24,7 +25,7 @@ namespace QCommonLib.QTasks
         internal Statuses Status { get => _status; set => _status = value; }
         private Statuses _status;
 
-        internal QBatch(List<QTask> tasks, QLogger log, string name)
+        internal QBatch(List<QTask> tasks, QLogger log, string name, Queues queue = Queues.Main)
         {
             Tasks = tasks;
 
@@ -33,6 +34,7 @@ namespace QCommonLib.QTasks
             Log = log;
 
             maxLife = Mathf.Clamp(Size * PER_TASK, MIN_LIFE, MAX_LIFE);
+            Queue = queue;
         }
 
         internal void Update()
@@ -107,6 +109,12 @@ namespace QCommonLib.QTasks
             Start,
             Processing,
             Finished
+        }
+
+        internal enum Queues
+        {
+            Main,
+            Final
         }
     }
 }
