@@ -16,7 +16,7 @@ namespace QCommonLib.QTasks
         internal Threads Thread { get; set; }
 
         /// <summary>
-        /// The task's status
+        /// The task's status - written to on Main thread only
         /// </summary>
         internal Statuses Status { get; set; }
 
@@ -48,7 +48,6 @@ namespace QCommonLib.QTasks
             }
             else if (Timer.Seconds > MAX_LIFE)
             {
-                Log.Warning($"Task reached EOL, terminating.", "[Q07]");
                 Status = Statuses.Finished;
                 return true;
             }
@@ -56,49 +55,7 @@ namespace QCommonLib.QTasks
             try
             {
                 Status = Statuses.Processing;
-
-                switch (Thread)
-                {
-                    case Threads.Simulation:
-                        Singleton<SimulationManager>.instance.AddAction(() =>
-                        {
-                            try
-                            {
-                                if (CodeBlock())
-                                {
-                                    Singleton<SimulationManager>.instance.m_ThreadingWrapper.QueueMainThread(() => Finish());
-                                }
-                                else
-                                {
-                                    Singleton<SimulationManager>.instance.m_ThreadingWrapper.QueueMainThread(() => ReQueue());
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Log.Error(e);
-                            }
-                        });
-                        break;
-
-                    case Threads.Main:
-                        Singleton<SimulationManager>.instance.m_ThreadingWrapper.QueueMainThread(() =>
-                        {
-                            try
-                            {
-                                if (CodeBlock()) Finish();
-                                else Status = Statuses.Waiting;
-                            }
-                            catch (Exception e)
-                            {
-                                Log.Error(e);
-                            }
-                        });
-                        break;
-
-                    default:
-                        Log.Error($"Task called invalid thread!", "[MI77]");
-                        break;
-                }
+                ThreadExecute(Thread, RunCodeBlock);
             }
             catch (Exception e)
             {
@@ -106,6 +63,25 @@ namespace QCommonLib.QTasks
                 return false;
             }
             return true;
+        }
+
+        private void RunCodeBlock()
+        {
+            try
+            {
+                if (CodeBlock())
+                {
+                    Finish();
+                }
+                else
+                {
+                    ReQueue();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "[Q09]");
+            }
         }
 
         /// <summary>
@@ -145,6 +121,29 @@ namespace QCommonLib.QTasks
             None,
             Main,
             Simulation
+        }
+
+
+        /// <summary>
+        /// Run the action's code in the specified QTask.Thread
+        /// </summary>
+        /// <param name="thread">The <c ref="QTask.Threads">Thread</c> to execute the code on</param>
+        /// <param name="action">The code to run</param>
+        /// <exception cref="Exception">An invalid thread was passed</exception>
+        internal static void ThreadExecute(Threads thread, Action action)
+        {
+            if (thread == Threads.Main)
+            {
+                QTaskManager.QueueOnMain(action);
+            }
+            else if (thread == Threads.Simulation)
+            {
+                QTaskManager.QueueOnSimulation(action);
+            }
+            else
+            {
+                throw new Exception($"Invalid thread for code execution [{thread}]");
+            }
         }
     }
 }

@@ -6,9 +6,9 @@ namespace QCommonLib.QTasks
 {
     internal class QBatch
     {
-        internal const int MAX_LIFE = 300; // Batch execution maximum life ceiling
+        internal const int MAX_LIFE_LIMIT = 300; // Batch execution maximum life ceiling
         internal const int PER_TASK = 2; // Max time per task
-        internal const int MIN_LIFE = QTask.MAX_LIFE + 5; // Batch execution max life floor 
+        internal const int MIN_LIFE_LIMIT = QTask.MAX_LIFE + 5; // Batch execution max life floor 
         private readonly int maxLife;
         private QTimer Timer { get; set; } = null;
 
@@ -33,7 +33,7 @@ namespace QCommonLib.QTasks
             Name = name;
             Log = log;
 
-            maxLife = Mathf.Clamp(Size * PER_TASK, MIN_LIFE, MAX_LIFE);
+            maxLife = Mathf.Clamp(Size * PER_TASK, MIN_LIFE_LIMIT, MAX_LIFE_LIMIT) / 5;
             Queue = queue;
         }
 
@@ -45,7 +45,6 @@ namespace QCommonLib.QTasks
             }
             else if (Timer.Seconds > maxLife)
             {
-                Log.Warning($"Batch reached EOL, terminating.", "[Q07]");
                 foreach (QTask t in Tasks)
                 {
                     t.Status = QTask.Statuses.Finished;
