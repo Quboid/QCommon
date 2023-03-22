@@ -9,7 +9,7 @@ namespace QCommonLib.QTasks
 {
     internal class QTaskManager : MonoBehaviour
     {
-        internal QLogger Log;
+        internal QLogger Log = null;
         private Queue<QBatch> MainQueue;
         private Stack<QBatch> FinalQueue;
         private QBatch Current;
