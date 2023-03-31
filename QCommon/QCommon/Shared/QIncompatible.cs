@@ -64,7 +64,7 @@ namespace QCommonLib
                     logMsg += $"\n  \"{mod}\"";
                 }
 
-                if (!plugin.isEnabled) continue;
+                //if (!plugin.isEnabled) continue;
                 if (m_incompatibleMods.ContainsKey(mod.steamId))
                 {
                     found.Add(plugin, mod);
@@ -168,7 +168,7 @@ namespace QCommonLib
             title.padding = new RectOffset(10, 10, 15, 15);
             title.relativePosition = new Vector2(60, 12);
 
-            title.text = callerName + " - " + QStr.QIncompatible_Title;
+            title.text = callerName + " - " + "Incompatible Mods Check";// QStr.QIncompatible_Title;
 
             closeBtn = mainPanel.AddUIComponent<UIButton>();
             closeBtn.eventClick += CloseButtonClick;
@@ -322,8 +322,8 @@ namespace QCommonLib
         {
             ExceptionPanel exceptionPanel = UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel");
             exceptionPanel.SetMessage(
-                title: QStr.QIncompatible_RestartTitle,
-                message: QStr.QIncompatible_RestartBlurb,
+                title: "Game Restart Required",//QStr.QIncompatible_RestartTitle,
+                message: "List of mods changed (deleted or unsubscribed).\r\nPlease restart the game to complete operation",//QStr.QIncompatible_RestartBlurb,
                 error: false);
         }
 
@@ -336,7 +336,7 @@ namespace QCommonLib
         /// <param name="plugin">The <see cref="PluginInfo"/> instance of the incompatible mod.</param>
         private void CreateEntry(ref UIScrollablePanel parent, IncompatibleMod mod, PluginInfo plugin)
         {
-            string caption = plugin.publishedFileID.AsUInt64 == LOCAL_MOD ? QStr.QIncompatible_DeleteMod : QStr.QIncompatible_UnsubMod;
+            string caption = plugin.publishedFileID.AsUInt64 == LOCAL_MOD ? "Delete" : "Unsubscribe"; //QStr.QIncompatible_DeleteMod : QStr.QIncompatible_UnsubMod;
 
             UIPanel panel = parent.AddUIComponent<UIPanel>();
             panel.size = new Vector2(560, 50);
