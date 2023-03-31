@@ -118,38 +118,38 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QCommon_cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </data>
   <data name="QCommon_no" xml:space="preserve">
-    <value>No</value>
+    <value>Non</value>
   </data>
   <data name="QCommon_ok" xml:space="preserve">
-    <value>OK</value>
+    <value>Ok</value>
   </data>
   <data name="QCommon_PressAnyKey" xml:space="preserve">
-    <value>Press Any Key</value>
+    <value>Appuyez sur une touche</value>
   </data>
   <data name="QCommon_ThisLanguage" xml:space="preserve">
-    <value>English</value>
+    <value>Anglais</value>
     <comment>The name of the language you are translating to</comment>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Oui</value>
   </data>
   <data name="QIncompatible_DeleteMod" xml:space="preserve">
-    <value>Delete Mod</value>
+    <value>Supprimer le mod</value>
   </data>
   <data name="QIncompatible_RestartBlurb" xml:space="preserve">
-    <value>List of mods changed (deleted or unsubscribed).
-Please restart the game to complete operation</value>
+    <value>Liste des mods modifiés (supprimés ou désabonnés).
+Veuillez redémarrer le jeu pour terminer l'opération</value>
   </data>
   <data name="QIncompatible_RestartTitle" xml:space="preserve">
-    <value>Game Restart Required</value>
+    <value>Redémarrage du jeu nécessaire</value>
   </data>
   <data name="QIncompatible_Title" xml:space="preserve">
-    <value>Incompatible Mods Check</value>
+    <value>Vérification des mods incompatibles</value>
   </data>
   <data name="QIncompatible_UnsubMod" xml:space="preserve">
-    <value>Unsubscribe Mod</value>
+    <value>Se désabonner</value>
   </data>
 </root>
