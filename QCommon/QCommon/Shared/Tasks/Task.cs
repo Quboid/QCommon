@@ -85,7 +85,7 @@ namespace QCommonLib.QTasks
         }
 
         /// <summary>
-        /// Called immediately after CodeBlock has executed, on main thread
+        /// Called on main thread immediately after CodeBlock has executed
         /// </summary>
         internal void ReQueue()
         {
@@ -93,7 +93,7 @@ namespace QCommonLib.QTasks
         }
 
         /// <summary>
-        /// Called immediately after CodeBlock has executed, on main thread
+        /// Called on main thread immediately after CodeBlock has executed
         /// </summary>
         internal void Finish()
         {
