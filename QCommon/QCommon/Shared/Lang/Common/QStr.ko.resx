@@ -130,7 +130,7 @@
     <value>아무 키나 누르세요</value>
   </data>
   <data name="QCommon_ThisLanguage" xml:space="preserve">
-    <value>English</value>
+    <value>한국어</value>
     <comment>The name of the language you are translating to</comment>
   </data>
   <data name="QCommon_yes" xml:space="preserve">
